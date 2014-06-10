@@ -4,6 +4,6 @@
         "psr-4": { "marcovanest\\Centralino": "src/" }
     },
     "require": {
-        "psr/log": "dev-master"
+        "psr/log": "1.0.*"
     }
 }
