@@ -1,6 +1,0 @@
-{
-    "require": {
-        "psr/log": "dev-master",
-        "slim/slim": "dev-master"
-    }
-}
