@@ -1,0 +1,8 @@
+{
+    "name": "Centralino/Centralino",
+    "require": {
+        "psr/log": "dev-master",
+    },
+    "autoload": {
+        "psr-4": { "Centralino\\": "src/" },
+}
