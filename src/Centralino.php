@@ -13,6 +13,6 @@ class Centralino
     public function initialize()
     {
         $this->container['logger'] = new Centralino\Core\Logger\DefaultLogger(LOG_DIR . DS . 'tests', 'database.log');
-        test
+        t
     }
 }
