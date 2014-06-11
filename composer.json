@@ -1,7 +1,7 @@
 {
     "name": "marcovanest/Centralino",
     "autoload": {
-        "psr-4": { "marcovanest\\Centralino\\": "src/" }
+        "psr-4": { "Centralino\\": "src/" }
     },
     "require": {
         "psr/log": "1.0.*"

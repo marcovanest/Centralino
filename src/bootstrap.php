@@ -2,9 +2,11 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-require_once("Core/Autoloader.php");
-require_once('benny/vendor/autoload.php');
+echo __DIR__;
+// require_once("Core/Autoloader.php");
+// require_once('benny/vendfor/autoload.php');
 
+/*
 date_default_timezone_set("Europe/Amsterdam");
 
 define("EXT", ".php");
@@ -31,3 +33,4 @@ $exceptionHandler = new Centralino\Core\Exception\Handler($logger);
 set_exception_handler(array($exceptionHandler , 'handleException'));
 
 
+*/
