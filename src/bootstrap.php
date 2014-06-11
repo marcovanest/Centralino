@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-echo __DIR__;
+echo __DIR__;d
 // require_once("Core/Autoloader.php");
 // require_once('benny/vendfor/autoload.php');
 
