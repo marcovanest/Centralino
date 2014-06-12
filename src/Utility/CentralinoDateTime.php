@@ -10,7 +10,6 @@ class CentralinoDateTime
         try{
             $this->date = new \DateTime($date);
         }catch(\Exception $exception) {
-            var_dump($exception);
             throw new UtilityException("Invalid date given");
         }
     }

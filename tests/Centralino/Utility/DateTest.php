@@ -18,6 +18,9 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Centralino\Utility\CentralinoDateTime', $dateTime);
     }
 
+   /**
+    * @expectedException Centralino\Utility\UtilityException
+    */
     public function testAddSeconds_Invalid_Integer_Amount_Throws()
     {
         $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
