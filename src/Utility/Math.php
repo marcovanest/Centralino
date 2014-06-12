@@ -1,7 +1,7 @@
 <?php
 namespace Centralino\Utility;
 
-class Date
+class Math
 {
 
 }
