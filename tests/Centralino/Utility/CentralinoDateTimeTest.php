@@ -60,6 +60,12 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2014-01-01 13:40:10', $dateTime->getDateTime());
     }
 
+    public function testCentralinoDateTime_ToString()
+    {
+        $dateTime = new CentralinoDateTime('01-01-2014 13.40.10', new \DateTimeZone('UTC'));
+        $this->assertEquals('2014-01-01 13:40:10', $dateTime);
+    }
+
     /**
      * @dataProvider timezonesProvider
      */

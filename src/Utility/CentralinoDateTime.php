@@ -1,7 +1,7 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoDateTime extends \DateTime
+class CentralinoDateTime
 {
     CONST DATE_FORMAT     = 'Y-m-d';
     CONST TIME_FORMAT     = 'H:i:s';
@@ -13,9 +13,7 @@ class CentralinoDateTime extends \DateTime
     public function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
     {
         try{
-           parent::__construct($dateTimeString, ! is_null($dateTimeZone) ? $dateTimeZone : new \DateTimeZone(self::TIME_ZONE) );
-
-           $this->timezone = parent::getTimezone();
+            $this->datetime = new \DateTime($dateTimeString, $dateTimeZone);
         }catch(\Exception $exception) {
             throw new UtilityException("Invalid date given");
         }
@@ -104,25 +102,40 @@ class CentralinoDateTime extends \DateTime
     public function formatDateTime($formatSepcified, \DateTimeZone $dateTimeZone = null)
     {
         if( ! is_null($dateTimeZone)) {
-            $this->setTimeZone($dateTimeZone);
+            $this->datetime->setTimeZone($dateTimeZone);
         }
 
         try {
-            return parent::format($formatSepcified);
+            return $this->datetime->format($formatSepcified);
         }catch(\UtilityException $exception) {
             throw $exception;
         }
+    }
+
+    public function setTimeZone(\DateTimeZone $dateTimeZone)
+    {
+        $this->datetime->setTimeZone($dateTimeZone);
+    }
+
+    public function getTimeZone()
+    {
+        return $this->datetime->getTimeZone();
+    }
+
+    public function getOffset()
+    {
+        return $this->datetime->getOffset();
     }
 
     private function addAmount($period, $amount, $perioddesignator)
     {
         try{
             $amount = new CentralinoInteger($amount);
-            parent::add(new \DateInterval($period.$amount->get().$perioddesignator));
+            $this->datetime->add(new \DateInterval($period.$amount->get().$perioddesignator));
         }catch(UtilityException $exception) {
-           throw new UtilityException('Invalid amount; Not a integer');
+            throw new UtilityException('Invalid amount; Not a integer');
         }catch(\Exception $exception) {
-           throw new UtilityException('Invalid add amount');
+            throw new UtilityException('Invalid add amount');
         }
     }
 
@@ -130,11 +143,11 @@ class CentralinoDateTime extends \DateTime
     {
         try{
             $amount = new CentralinoInteger($amount);
-            parent::sub(new \DateInterval($period.$amount->get().$perioddesignator));
+            $this->datetime->sub(new \DateInterval($period.$amount->get().$perioddesignator));
         }catch(UtilityException $exception) {
-           throw new UtilityException('Invalid amount; Not a integer');
+            throw new UtilityException('Invalid amount; Not a integer');
         }catch(\Exception $exception) {
-           throw new UtilityException('Invalid sub amount');
+            throw new UtilityException('Invalid sub amount');
         }
     }
 }
