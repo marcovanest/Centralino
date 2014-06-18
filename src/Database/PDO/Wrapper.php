@@ -6,14 +6,14 @@ use Psr\Log;
 
 class Wrapper implements WrapperInterface
 {
+    CONST DEFAULT_FETCH_MODE    = \PDO::FETCH_OBJ;
+    CONST CHAR_ENCODING         = 'utf8mb4';
     /**
      * Database PDO instance, handler
      */
     private $pdoInstance;
 
     private $statement;
-
-    const DEFAULT_FETCH_MODE = \PDO::FETCH_OBJ;
 
     public function __construct(\PDO $pdoInstance) {
         $this->pdoInstance = $pdoInstance;
