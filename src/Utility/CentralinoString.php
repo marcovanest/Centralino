@@ -28,5 +28,4 @@ class CentralinoString
     {
         return $this->string;
     }
-
 }
