@@ -31,14 +31,52 @@ class CentralinoString
         return mb_strlen($this->string, self::CHAR_ENCODING);
     }
 
+    public function getPart($start, $length = null)
+    {
+        return mb_substr($this->string, $start, $length, self::CHAR_ENCODING);
+    }
+
+    public function countOccurrences($needle)
+    {
+        $stringNeedle = new self($needle);
+        if(empty($stringNeedle->get())) {
+            throw new UtilityException("Invalid needle given");
+        }
+
+        return mb_substr_count($this->string, $needle, self::CHAR_ENCODING);
+    }
+
+    public function firstOccurrence($needle, $offset = 0)
+    {
+        $stringNeedle = new self($needle);
+        if(empty($stringNeedle->get())) {
+            throw new UtilityException("Invalid needle given");
+        }
+
+        if($offset > $this->getLength()) {
+            throw new UtilityException("Invalid offset given");
+        }
+
+        return mb_strpos($this->string, $needle, $offset, self::CHAR_ENCODING);
+    }
+
+    public function LastOccurrence($needle, $offset = 0)
+    {
+        $stringNeedle = new self($needle);
+        if(empty($stringNeedle->get())) {
+            throw new UtilityException("Invalid needle given");
+        }
+
+        if($offset > $this->getLength()) {
+            throw new UtilityException("Invalid offset given");
+        }
+
+        return mb_strrpos($this->string, $needle, $offset, self::CHAR_ENCODING);
+    }
+
     public function isUTF8()
     {
         return mb_check_encoding($this->string, self::CHAR_ENCODING);
-    }
-
-    public static function isString($string)
-    {
-        return is_string($string);
     }
 
     private function isValidString()
