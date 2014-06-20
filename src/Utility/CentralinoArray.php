@@ -3,6 +3,7 @@ namespace Centralino\Utility;
 
 class CentralinoArray implements
     \SeekableIterator,
+    \RecursiveIterator,
     \ArrayAccess,
     \Countable,
     \Serializable
@@ -27,50 +28,53 @@ class CentralinoArray implements
 
     public function keys()
     {
-        return  array_keys($this->array);
-    }
-
-    private function isArray($array)
-    {
-        return is_array($array);
+        return array_keys($this->array);
     }
 
     public function seek($position)
     {
-        if ($position > count($this->array)) {
+        if ($position > $this->count()-1) {
             throw new OutOfBoundsException();
         }
 
-        $this->rewind();
-
-        for ($i = 0; $i < $position; $i++) {
-            $this->next();
-        }
+        $this->position = $position;
     }
 
     public function current()
     {
-        return current($this->array);
+        return $this->array[$this->key()];
     }
 
     public function key()
     {
-        return key($this->array);
+        return array_keys($this->array)[$this->position];
     }
 
     public function next()
     {
-        return next($this->array);
+        $this->position++;
     }
 
     public function rewind()
     {
-        reset($this->array);
+        $this->position = 0;
     }
 
     public function valid()
     {
-        return (current($this->array) !== false);
+        return isset($this->array[$this->key()]);
+    }
+
+    public function hasChildren()
+    {
+        return is_array($this->array[$this->key()]);
+    }
+
+    public function getChildren()
+    {
+        // echo '<pre>';
+        // print_r($this->_data[$this->_position]);
+        // echo '</pre>';
     }
 
     public function offsetSet($key, $value)
@@ -106,5 +110,10 @@ class CentralinoArray implements
     public function unserialize($data)
     {
         $this->array = unserialize($data);
+    }
+
+    private function isArray($array)
+    {
+        return is_array($array);
     }
 }
