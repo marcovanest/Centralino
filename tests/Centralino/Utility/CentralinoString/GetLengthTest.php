@@ -1,23 +1,25 @@
 <?php
-namespace Centralino\Utility;
+namespace CentralinoString;
+
+use Centralino\Utility;
 
 class GetLengthTest extends \PHPUnit_Framework_TestCase
 {
     public function testLength()
     {
-        $string = new CentralinoString("Iñtërnâtiônàlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiônàlizætiøn");
         $this->assertEquals(20, $string->getLength());
     }
 
     public function testLenght_Only_ASCII_Characters()
     {
-        $string = new CentralinoString("Internationalization");
+        $string = new Utility\CentralinoString("Internationalization");
         $this->assertEquals(20, $string->getLength());
     }
 
     public function testLength_Empty()
     {
-        $string = new CentralinoString("");
+        $string = new Utility\CentralinoString("");
         $this->assertEquals(0, $string->getLength());
     }
 }

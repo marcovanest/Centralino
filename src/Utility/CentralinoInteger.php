@@ -19,6 +19,11 @@ class CentralinoInteger
         return $this->int;
     }
 
+    public function __toString()
+    {
+        return (string) $this->int;
+    }
+
     public function isPositive()
     {
         return $this->int >= 0;
@@ -34,8 +39,4 @@ class CentralinoInteger
         return is_integer($int);
     }
 
-    public function __toString()
-    {
-        return (string) $this->int;
-    }
 }

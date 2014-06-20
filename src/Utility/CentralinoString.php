@@ -31,9 +31,11 @@ class CentralinoString
         return mb_strlen($this->string, self::CHAR_ENCODING);
     }
 
-    public function getPart($start, $length = null)
+    public function getPart(CentralinoInteger $start, CentralinoInteger $length = null)
     {
-        return mb_substr($this->string, $start, $length, self::CHAR_ENCODING);
+        $length = ! is_null($length) ? $length->get() : null;
+
+        return mb_substr($this->string, $start->get(), $length, self::CHAR_ENCODING);
     }
 
     public function countOccurrences($needle)
@@ -46,32 +48,42 @@ class CentralinoString
         return mb_substr_count($this->string, $needle, self::CHAR_ENCODING);
     }
 
-    public function firstOccurrence($needle, $offset = 0)
+    public function firstOccurrence($needle, CentralinoInteger $offset = null)
     {
         $stringNeedle = new self($needle);
         if(empty($stringNeedle->get())) {
             throw new UtilityException("Invalid needle given");
         }
 
-        if($offset > $this->getLength()) {
+        $offset = ! is_null($offset) ? $offset->get() : null;
+
+        if( ! is_null($offset) && $offset > $this->getLength()) {
             throw new UtilityException("Invalid offset given");
         }
 
         return mb_strpos($this->string, $needle, $offset, self::CHAR_ENCODING);
     }
 
-    public function LastOccurrence($needle, $offset = 0)
+    public function LastOccurrence($needle, CentralinoInteger $offset = null)
     {
         $stringNeedle = new self($needle);
         if(empty($stringNeedle->get())) {
             throw new UtilityException("Invalid needle given");
         }
 
-        if($offset > $this->getLength()) {
+        $offset = ! is_null($offset) ? $offset->get() : null;
+
+        if( ! is_null($offset) && $offset > $this->getLength()) {
             throw new UtilityException("Invalid offset given");
         }
 
         return mb_strrpos($this->string, $needle, $offset, self::CHAR_ENCODING);
+    }
+
+    public function trim($character_mask = " \t\n\r\0\x0B")
+    {
+        $this->string = trim($this->string, $character_mask);
+        return $this;
     }
 
     public function isUTF8()

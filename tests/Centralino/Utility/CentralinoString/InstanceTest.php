@@ -1,5 +1,7 @@
 <?php
-namespace Centralino\Utility;
+namespace CentralinoString;
+
+use Centralino\Utility;
 
 class InstanceTest extends \PHPUnit_Framework_TestCase
 {
@@ -8,19 +10,19 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     */
     public function testCentralinoString_Invalid_String_Throws()
     {
-        $string = new CentralinoString("Iñtërnâtiôn\xe9àlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiôn\xe9àlizætiøn");
     }
 
     public function testCentralinoString_Valid()
     {
-        $string = new CentralinoString("Iñtërnâtiônàlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiônàlizætiøn");
 
         $this->assertInstanceOf('\Centralino\Utility\CentralinoString', $string);
     }
 
     public function testCentralinoString_Empty()
     {
-        $string = new CentralinoString("");
+        $string = new Utility\CentralinoString("");
 
         $this->assertInstanceOf('\Centralino\Utility\CentralinoString', $string);
     }
