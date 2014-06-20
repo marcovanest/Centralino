@@ -16,9 +16,17 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
    /**
     * @expectedException Centralino\Utility\UtilityException
     */
-    public function testCentralinoInteger_Null_Throws()
+    public function testCentralinoInteger_Null_Value_Throws()
     {
         $integer = new Utility\CentralinoInteger(null);
+    }
+
+   /**
+    * @expectedException Centralino\Utility\UtilityException
+    */
+    public function testCentralinoInteger_Float_Value_Throws()
+    {
+        $integer = new Utility\CentralinoInteger(0.111244);
     }
 
     public function testCentralinoInteger_Valid_Positive_Value()

@@ -7,21 +7,16 @@ class CentralinoInteger
 
     public function __construct($int)
     {
-        if( ! self::isInteger($int)) {
+        if( ! $this->isInteger($int)) {
             throw new UtilityException('Invalid integer');
         }
 
-        $this->int = $int;
+        $this->int = (int) $int;
     }
 
     public function get()
     {
-        return $this->int;
-    }
-
-    public function __toString()
-    {
-        return (string) $this->int;
+        return (int) $this->int;
     }
 
     public function isPositive()
@@ -34,9 +29,8 @@ class CentralinoInteger
         return $this->int < 0;
     }
 
-    public static function isInteger($int)
+    private function isInteger($int)
     {
         return is_integer($int);
     }
-
 }
