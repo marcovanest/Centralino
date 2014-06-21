@@ -99,14 +99,14 @@ class CentralinoDateTime
         $this->subAmount('PT', $seconds, 'H');
     }
 
-    public function formatDateTime($formatSepcified, \DateTimeZone $dateTimeZone = null)
+    public function formatDateTime($formatSpecified, \DateTimeZone $dateTimeZone = null)
     {
         if( ! is_null($dateTimeZone)) {
             $this->datetime->setTimeZone($dateTimeZone);
         }
 
         try {
-            return $this->datetime->format($formatSepcified);
+            return $this->datetime->format($formatSpecified);
         }catch(\UtilityException $exception) {
             throw $exception;
         }

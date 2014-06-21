@@ -146,6 +146,25 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
     * @expectedException Centralino\Utility\UtilityException
     * @dataProvider invalidAddDurationPeriodsProvider
     */
+    public function testAddDays_Invalid_Duration_Period_Throws($invalidInput)
+    {
+        $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
+        $dateTime->addDays($invalidInput);
+    }
+
+    public function testAddDays_Valid_Duration_Period()
+    {
+        $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
+        $dateTime->addDays(12);
+
+        $this->assertEquals('2014-01-13 13:40:10', $dateTime->getDateTime());
+    }
+
+
+   /**
+    * @expectedException Centralino\Utility\UtilityException
+    * @dataProvider invalidAddDurationPeriodsProvider
+    */
     public function testAddMonths_Invalid_Duration_Period_Throws($invalidInput)
     {
         $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
@@ -191,7 +210,7 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
     public function testSubSeconds_Valid_Duration_Period()
     {
         $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
-        $dateTime->SubSeconds(30);
+        $dateTime->subSeconds(30);
 
         $this->assertEquals('2014-01-01 13:39:40', $dateTime->getDateTime());
     }
@@ -209,7 +228,7 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
     public function testSubMinutes_Valid_Duration_Period()
     {
         $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
-        $dateTime->SubMinutes(30);
+        $dateTime->subMinutes(30);
 
         $this->assertEquals('2014-01-01 13:10:10', $dateTime->getDateTime());
     }
@@ -227,9 +246,27 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
     public function testSubHours_Valid_Duration_Period()
     {
         $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
-        $dateTime->SubHours(10);
+        $dateTime->subHours(10);
 
         $this->assertEquals('2014-01-01 03:40:10', $dateTime->getDateTime());
+    }
+
+   /**
+    * @expectedException Centralino\Utility\UtilityException
+    * @dataProvider invalidAddDurationPeriodsProvider
+    */
+    public function testSubDays_Invalid_Duration_Period_Throws($invalidInput)
+    {
+        $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
+        $dateTime->subDays($invalidInput);
+    }
+
+    public function testSubDays_Valid_Duration_Period()
+    {
+        $dateTime = new CentralinoDateTime('11-01-2014 13:40:10');
+        $dateTime->subDays(10);
+
+        $this->assertEquals('2014-01-01 13:40:10', $dateTime->getDateTime());
     }
 
    /**
@@ -266,6 +303,14 @@ class CentralinoDateTimeTest extends \PHPUnit_Framework_TestCase
         $dateTime->SubYears(10);
 
         $this->assertEquals('2004-01-01 13:40:10', $dateTime->getDateTime());
+    }
+
+    public function testFormatDateTime_With_Custom_Timezone()
+    {
+        $dateTime = new CentralinoDateTime('01-01-2014 13:40:10');
+        $dateTime->formatDateTime('Y-m-d', new \DateTimeZone('GMT'));
+
+        $this->assertEquals('GMT', $dateTime->getTimeZone()->getName());
     }
 
     public function invalidAddDurationPeriodsProvider()
