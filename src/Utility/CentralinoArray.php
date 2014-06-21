@@ -19,6 +19,8 @@ class CentralinoArray implements
         }
 
         $this->array = (array) $array;
+
+        $this->position = 0;
     }
 
     public function get()
@@ -33,11 +35,11 @@ class CentralinoArray implements
 
     public function seek($position)
     {
-        if ($position > $this->count()-1) {
-            throw new OutOfBoundsException();
-        }
-
         $this->position = $position;
+
+        if ($this->valid() === false) {
+            throw new \OutOfBoundsException();
+        }
     }
 
     public function current()
@@ -47,12 +49,27 @@ class CentralinoArray implements
 
     public function key()
     {
-        return array_keys($this->array)[$this->position];
+        $keys = $this->keys();
+
+        if (array_key_exists($this->position, $keys) === false) {
+            throw new \OutOfBoundsException();
+        }
+
+        return $keys[$this->position];
     }
 
     public function next()
     {
         $this->position++;
+
+        return $this->valid();
+    }
+
+    public function prev()
+    {
+        $this->position--;
+
+        return $this->valid();
     }
 
     public function rewind()
@@ -62,7 +79,12 @@ class CentralinoArray implements
 
     public function valid()
     {
-        return isset($this->array[$this->key()]);
+        $key = isset(array_keys($this->array)[$this->position]);
+        if($key) {
+            return isset($this->array[$this->key()]);
+        }else {
+            return false;
+        }
     }
 
     public function hasChildren()
@@ -72,9 +94,10 @@ class CentralinoArray implements
 
     public function getChildren()
     {
-        // echo '<pre>';
-        // print_r($this->_data[$this->_position]);
-        // echo '</pre>';
+        if($this->hasChildren()) {
+            return new self($this->array[$this->key()]);
+        }
+        return false;
     }
 
     public function offsetSet($key, $value)
