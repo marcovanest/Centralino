@@ -57,9 +57,8 @@ class CentralinoInteger
 
     public function mod($modulo)
     {
-        if(static::isInteger($multi)) {
-            $this->int = $this->int % $modulo;
-            return true;
+        if(static::isInteger($modulo)) {
+            return $this->int % $modulo;
         }
         return false;
     }
