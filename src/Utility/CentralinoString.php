@@ -9,11 +9,11 @@ class CentralinoString
 
     public function __construct($string)
     {
-        $this->string = $string;
-
-        if( ! $this->isString()) {
+        if( ! static::isString($string)) {
             throw new UtilityException("Invalid string given");
         }
+
+        $this->string = $string;
     }
 
     public function __toString()
@@ -86,16 +86,11 @@ class CentralinoString
         return $this;
     }
 
-    public function isUTF8()
+    public static function isString($string)
     {
-        return mb_check_encoding($this->string, self::CHAR_ENCODING);
-    }
-
-    private function isString()
-    {
-        if( ! is_string($this->string) ||
-            ! $this->isUTF8() ||
-            ! mb_detect_encoding($this->string, self::CHAR_ENCODING, true)
+        if( ! is_string($string) ||
+            ! mb_check_encoding($string, self::CHAR_ENCODING) ||
+            ! mb_detect_encoding($string, self::CHAR_ENCODING, true)
         ) {
             return false;
         }
