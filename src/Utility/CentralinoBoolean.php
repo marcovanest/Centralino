@@ -31,20 +31,6 @@ class CentralinoBoolean
 
     public static function isBool($boolean)
     {
-        if(CentralinoInteger::isInteger($boolean)) {
-            $integer = new CentralinoInteger($boolean);
-            if($integer->isNegative()) {
-                return false;
-            }
-        }
-
-        if(CentralinoFloat::isFloat($boolean)) {
-            $float = new CentralinoFloat($boolean);
-            if($float->isNegative()) {
-                return false;
-            }
-        }
-
-        return is_bool((bool) $boolean);
+        return is_bool($boolean);
     }
 }
