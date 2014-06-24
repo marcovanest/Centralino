@@ -63,6 +63,14 @@ class CentralinoInteger
         return false;
     }
 
+    public function abs()
+    {
+        if(static::isInteger($modulo)) {
+            $this->int = abs($this->int);
+        }
+        return false;
+    }
+
     public function isPositive()
     {
         return $this->int >= 0;

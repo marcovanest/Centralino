@@ -8,10 +8,15 @@ class CentralinoBoolean
     public function __construct($boolean)
     {
         if( ! static::isBool($boolean)) {
-            throw new UtilityException('Invalid float');
+            throw new UtilityException('Invalid boolean');
         }
 
         $this->boolean = (bool) $boolean;
+    }
+
+    public function get()
+    {
+        return (bool) $this->boolean;
     }
 
     public function isFalse()
@@ -26,6 +31,20 @@ class CentralinoBoolean
 
     public static function isBool($boolean)
     {
-        return is_bool($boolean);
+        if(CentralinoInteger::isInteger($boolean)) {
+            $integer = new CentralinoInteger($boolean);
+            if($integer->isNegative()) {
+                return false;
+            }
+        }
+
+        if(CentralinoFloat::isFloat($boolean)) {
+            $float = new CentralinoFloat($boolean);
+            if($float->isNegative()) {
+                return false;
+            }
+        }
+
+        return is_bool((bool) $boolean);
     }
 }
