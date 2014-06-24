@@ -7,7 +7,7 @@ class CentralinoInteger
 
     public function __construct($int)
     {
-        if( ! $this->isInteger($int)) {
+        if( ! static::isInteger($int)) {
             throw new UtilityException('Invalid integer');
         }
 
@@ -17,6 +17,51 @@ class CentralinoInteger
     public function get()
     {
         return (int) $this->int;
+    }
+
+    public function add($add)
+    {
+        if(static::isInteger($add)) {
+            $this->int = $this->int + $add;
+            return true;
+        }
+        return false;
+    }
+
+    public function sub($sub)
+    {
+        if(static::isInteger($sub)) {
+            $this->int = $this->int - $sub;
+            return true;
+        }
+        return false;
+    }
+
+    public function div($divide)
+    {
+        if(static::isInteger($divide)) {
+            $this->int = $this->int / $divide;
+            return true;
+        }
+        return false;
+    }
+
+    public function mul($multi)
+    {
+        if(static::isInteger($multi)) {
+            $this->int = $this->int * $multi;
+            return true;
+        }
+        return false;
+    }
+
+    public function mod($modulo)
+    {
+        if(static::isInteger($multi)) {
+            $this->int = $this->int % $modulo;
+            return true;
+        }
+        return false;
     }
 
     public function isPositive()
@@ -29,7 +74,7 @@ class CentralinoInteger
         return $this->int < 0;
     }
 
-    private function isInteger($int)
+    public static function isInteger($int)
     {
         return is_integer($int);
     }
