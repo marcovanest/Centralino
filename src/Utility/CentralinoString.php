@@ -11,7 +11,7 @@ class CentralinoString
     {
         $this->string = $string;
 
-        if( ! $this->isValidString()) {
+        if( ! $this->isString()) {
             throw new UtilityException("Invalid string given");
         }
     }
@@ -91,7 +91,7 @@ class CentralinoString
         return mb_check_encoding($this->string, self::CHAR_ENCODING);
     }
 
-    private function isValidString()
+    private function isString()
     {
         if( ! is_string($this->string) ||
             ! $this->isUTF8() ||

@@ -16,9 +16,9 @@ class CentralinoFloat
         $this->float = (float) $float;
     }
 
-    public function get()
+    public function get($precision = self::PRECISION)
     {
-        return (float) round($this->float, self::PRECISION);
+        return (float) round($this->float, $precision);
     }
 
     public function add($add)
