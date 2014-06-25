@@ -39,6 +39,12 @@ class PowTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(15129, $integer->pow(2));
     }
 
+    public function testPow_InValid_Pow()
+    {
+        $integer = new Utility\CentralinoInteger(123);
+        $this->assertFalse($integer->pow("3213"));
+    }
+
     public function baseNegativeExpNegativeProvider()
     {
         return call_user_func(function() {

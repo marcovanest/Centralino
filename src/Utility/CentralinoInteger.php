@@ -55,6 +55,14 @@ class CentralinoInteger
         return false;
     }
 
+    public function mod($modulo)
+    {
+        if(static::isInteger($modulo)) {
+            return new self( ($this->int % $modulo) );
+        }
+        return false;
+    }
+
     public function pow($pow)
     {
         if(static::isInteger($pow)) {
@@ -66,14 +74,6 @@ class CentralinoInteger
             }elseif(CentralinoFloat::isFloat($result)) {
                 return new CentralinoFloat($result);
             }
-        }
-        return false;
-    }
-
-    public function mod($modulo)
-    {
-        if(static::isInteger($modulo)) {
-            return new self( ($this->int % $modulo) );
         }
         return false;
     }

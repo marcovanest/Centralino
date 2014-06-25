@@ -59,9 +59,8 @@ class CentralinoFloat
 
     public function mod($modulo)
     {
-        if(static::isFloat($modulo) || CentralinoInteger::isInteger($add)) {
-            $this->float = $this->float % $modulo;
-            return true;
+        if(static::isFloat($modulo) || CentralinoInteger::isInteger($modulo)) {
+            return new self( fmod($this->float, $modulo) );
         }
         return false;
     }
@@ -69,15 +68,29 @@ class CentralinoFloat
     public function pow($pow)
     {
         if(static::isFloat($pow) || CentralinoInteger::isInteger($pow)) {
-            $this->float = pow($this->float, $pow);
-            return true;
+            $result = pow($this->float, $pow);
+
+            if($this->isFloat($result)) {
+                $this->float = $result;
+                return true;
+            }elseif(CentralinoInteger::isInteger($result)) {
+                return new CentralinoInteger($result);
+            }
         }
         return false;
     }
 
+    public function abs()
+    {
+        return new self( abs($this->float) );
+    }
+
     public function sqrt()
     {
-        return sqrt($this->float);
+        if($this->isPositive()) {
+            return new CentralinoFloat(sqrt($this->float));
+        }
+        return false;
     }
 
     public function isPositive()
