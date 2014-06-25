@@ -8,13 +8,21 @@ class ModTest extends \PHPUnit_Framework_TestCase
     public function testMod_Valid_Positive_Mod()
     {
         $integer = new Utility\CentralinoInteger(123);
-        $this->assertEquals(3, $integer->mod(15));
+
+        $mod = $integer->mod(15);
+        $this->assertInstanceOf('Centralino\Utility\CentralinoInteger', $mod);
+
+        $this->assertEquals(3, $mod->get());
     }
 
     public function testMod_Valid_Negative_Mod()
     {
         $integer = new Utility\CentralinoInteger(123);
-        $this->assertEquals(3, $integer->mod(-15));
+
+        $mod = $integer->mod(-15);
+        $this->assertInstanceOf('Centralino\Utility\CentralinoInteger', $mod);
+
+        $this->assertEquals(3, $mod->get());
     }
 
     public function testMod_InValid_Mod()

@@ -22,7 +22,7 @@ class CentralinoInteger
     public function add($add)
     {
         if(static::isInteger($add)) {
-            $this->int = $this->int + $add;
+            $this->int = ($this->int + $add);
             return true;
         }
         return false;
@@ -31,7 +31,7 @@ class CentralinoInteger
     public function sub($sub)
     {
         if(static::isInteger($sub)) {
-            $this->int = $this->int - $sub;
+            $this->int = ($this->int - $sub);
             return true;
         }
         return false;
@@ -40,7 +40,7 @@ class CentralinoInteger
     public function div($divide)
     {
         if(static::isInteger($divide)) {
-            $this->int = $this->int / $divide;
+            $this->int = ($this->int / $divide);
             return true;
         }
         return false;
@@ -49,8 +49,23 @@ class CentralinoInteger
     public function mul($multi)
     {
         if(static::isInteger($multi)) {
-            $this->int = $this->int * $multi;
+            $this->int = ($this->int * $multi);
             return true;
+        }
+        return false;
+    }
+
+    public function pow($pow)
+    {
+        if(static::isInteger($pow)) {
+            $result = pow($this->int, $pow);
+
+            if($this->isInteger($result)) {
+                $this->int = $result;
+                 return true;
+            }elseif(CentralinoFloat::isFloat($result)) {
+                return new CentralinoFloat($result);
+            }
         }
         return false;
     }
@@ -58,15 +73,20 @@ class CentralinoInteger
     public function mod($modulo)
     {
         if(static::isInteger($modulo)) {
-            return $this->int % $modulo;
+            return new self( ($this->int % $modulo) );
         }
         return false;
     }
 
     public function abs()
     {
-        if(static::isInteger($modulo)) {
-            $this->int = abs($this->int);
+        return new self( abs($this->int) );
+    }
+
+    public function sqrt()
+    {
+        if($this->isPositive()) {
+            return new CentralinoFloat(sqrt($this->int));
         }
         return false;
     }
