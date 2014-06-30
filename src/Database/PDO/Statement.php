@@ -4,19 +4,21 @@ namespace Centralino\Database\PDO;
 use Centralino\Database;
 use Psr\Log;
 
-class Statement
+class Statement extends \PDOStatement
 {
+    CONST DEFAULT_FETCH_MODE = \PDO::FETCH_OBJ;
+
     private $handle;
     private $sqlStatement;
     private $pdoStatement;
-    private $fetchMode = \PDO::FETCH_OBJ;
+    private $fetchMode = self::DEFAULT_FETCH_MODE;
     private $fetchParam = null;
 
-    public function __construct(\PDO $handle, $sqlStatement)
+    public function __construct(\PDO $handle, $sqlStatement, $options = array())
     {
         $this->handle       = $handle;
         $this->sqlStatement = $sqlStatement;
-        $this->pdoStatement = $this->handle->prepare($sqlStatement);
+        $this->pdoStatement = $this->handle->prepare($sqlStatement, $options);
     }
 
     public function setFetchMode($mode, $param = null)
@@ -72,14 +74,9 @@ class Statement
         return $this->pdoStatement->rowCount();
     }
 
-    public function bindColumn($column, &$param)
+    public function nextRow($cursor_orientation = \PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
     {
-        $this->pdoStatement->bindColumn($column, $param);
-    }
-
-    public function nextRow()
-    {
-        return $this->pdoStatement->fetch();
+        return $this->pdoStatement->fetch($this->fetchMode, $cursor_orientation, $cursor_offset);
     }
 
     public function allRows()

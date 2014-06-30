@@ -12,7 +12,7 @@ class PowTest extends \PHPUnit_Framework_TestCase
     {
         $float = new Utility\CentralinoFloat($base);
         $this->assertTrue($float->pow($exp));
-        $this->assertEqual($float->pow($exp));
+        $this->assertEquals($ex, $float->get());
     }
 
     /**
