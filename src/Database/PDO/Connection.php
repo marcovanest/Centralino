@@ -3,7 +3,7 @@ namespace Centralino\Database\PDO;
 
 use Centralino\Database\PDO\Driver;
 
-class PDOConnection extends \PDO
+class Connection extends \PDO
 {
     CONST DEFAULT_ERROR_MODE = \PDO::ERRMODE_EXCEPTION;
 

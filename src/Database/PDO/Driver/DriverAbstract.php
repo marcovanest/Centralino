@@ -35,10 +35,4 @@ abstract class DriverAbstract
     {
         return $this->options;
     }
-
-    public function connect()
-    {
-        return new \Centralino\Database\PDO\PDOConnection($this);
-    }
-
 }

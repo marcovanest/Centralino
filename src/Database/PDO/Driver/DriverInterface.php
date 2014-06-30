@@ -12,6 +12,4 @@ interface DriverInterface
     public function getDBOptions();
 
     public function getDsn();
-
-    public function connect();
 }
