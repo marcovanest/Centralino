@@ -1,7 +1,7 @@
 <?php
 namespace Centralino\Database\PDO;
 
-class Connect extends \PDO
+class PDOConnection extends \PDO
 {
     CONST DEFAULT_ERROR_MODE = \PDO::ERRMODE_EXCEPTION;
 
@@ -10,4 +10,6 @@ class Connect extends \PDO
         parent::__construct($dsn, $user, $password, $options);
         $this->setAttribute(\PDO::ATTR_ERRMODE, self::DEFAULT_ERROR_MODE);
     }
+
+
 }

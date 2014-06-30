@@ -11,17 +11,17 @@ class Pgsql implements DriverInterface
 
     public function __construct($host = '', $port = '', $dbname = '', $dbuser = '', $dbpass = '', $options = array())
     {
-        $this->host   = $host;
-        $this->port   = $port;
-        $this->dbname = $dbname;
-        $this->dbuser = $dbuser;
-        $this->dbpass = $dbpass;
-        $this->options = $options;
+        $this->host     = $host;
+        $this->port     = $port;
+        $this->dbname   = $dbname;
+        $this->dbuser   = $dbuser;
+        $this->dbpass   = $dbpass;
+        $this->options  = $options;
     }
 
     public function connect()
     {
-        return new \Centralino\Database\PDO\Connect(
+        return new \Centralino\Database\PDO\PDOConnection(
             $this->dsn(),
             $this->dbuser,
             $this->dbpass,
