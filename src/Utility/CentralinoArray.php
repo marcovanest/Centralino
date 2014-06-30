@@ -14,7 +14,7 @@ class CentralinoArray implements
 
     public function __construct(array $array)
     {
-        if( ! $this->isArray($array)) {
+        if( ! static::isArray($array)) {
             throw new UtilityException('Invalid array');
         }
 
@@ -135,7 +135,7 @@ class CentralinoArray implements
         $this->array = unserialize($data);
     }
 
-    private function isArray($array)
+    public static function isArray($array)
     {
         return is_array($array);
     }
