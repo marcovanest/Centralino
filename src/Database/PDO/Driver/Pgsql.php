@@ -19,19 +19,29 @@ class Pgsql implements DriverInterface
         $this->options  = $options;
     }
 
-    public function connect()
+    public function getName()
     {
-        return new \Centralino\Database\PDO\PDOConnection(
-            $this->dsn(),
-            $this->dbuser,
-            $this->dbpass,
-            $this->options
-        );
+        return 'pgsql';
     }
 
-    public function dsn()
+    public function getDBUser()
     {
-        $dsn = 'pgsql:';
+        return $this->dbuser;
+    }
+
+    public function getDBPass()
+    {
+        return $this->dbpass;
+    }
+
+    public function getDBOptions()
+    {
+        return $this->options;
+    }
+
+    public function getDsn()
+    {
+        $dsn = $this->getName().':';
 
         if( ! empty($this->host) ) {
             $dsn .= 'host=' . $this->host . ';';
@@ -46,5 +56,10 @@ class Pgsql implements DriverInterface
         }
 
         return $dsn;
+    }
+
+    public function connect()
+    {
+        return new \Centralino\Database\PDO\PDOConnection($this);
     }
 }
