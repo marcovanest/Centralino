@@ -5,13 +5,18 @@ class CentralinoBoolean
 {
     private $boolean;
 
-    public function __construct($boolean)
+    private function __construct($boolean)
     {
         if( ! static::isBool($boolean)) {
             throw new UtilityException('Invalid boolean');
         }
 
         $this->boolean = (bool) $boolean;
+    }
+
+    public static function create($boolean)
+    {
+        return new self($boolean);
     }
 
     public function get()

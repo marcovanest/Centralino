@@ -5,11 +5,11 @@ use Centralino\Utility;
 
 abstract class DriverAbstract
 {
-    private $host;
-    private $dbname;
-    private $dbuser;
-    private $dbpass;
-    private $options;
+    protected $host;
+    protected $dbname;
+    protected $dbuser;
+    protected $dbpass;
+    protected $options;
 
     public function __construct($host = '', $port = '', $dbname = '', $dbuser = '', $dbpass = '', $options = array())
     {

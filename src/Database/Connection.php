@@ -5,11 +5,18 @@ class Connection
 {
     public static function createPDOConnection($driver, $connectionParams)
     {
-       extract($connectionParams);
+        extract($connectionParams);
 
-       $class  = 'Centralino\Database\PDO\Driver\\'.mb_convert_case($driver, MB_CASE_TITLE, "UTF-8");
-       $driver = new $class($host, $port, $dbname, $dbuser, $dbpass, $options);
+        $class  = 'Centralino\Database\PDO\Driver\\'.mb_convert_case($driver, MB_CASE_TITLE, "UTF-8");
 
-       return new PDO\Connection($driver);
+        if( ! class_exists($class)) {
+            throw new DatabaseException("The given driver is either invalid or not implemented", 'critical');
+        }
+
+        $driver     = new $class($host, $port, $dbname, $dbuser, $dbpass, $options);
+
+        $connection = new PDO\Connection($driver);
+
+        return new PDO\Manager($connection);
     }
 }

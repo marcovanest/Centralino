@@ -13,6 +13,11 @@ class Pgsql extends DriverAbstract implements DriverInterface
         return 'pgsql';
     }
 
+    public function getCharset()
+    {
+        return 'utf8';
+    }
+
     public function getDsn()
     {
         $dsn = $this->getName().':';

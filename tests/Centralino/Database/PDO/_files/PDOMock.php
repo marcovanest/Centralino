@@ -1,7 +1,9 @@
 <?php
 namespace Centralino\Database\PDO\_files;
 
-class PDOMock extends \PDO
+use Centralino\Database\PDO;
+
+class PDOMock extends PDO\Connection
 {
     public function __construct()
     {
