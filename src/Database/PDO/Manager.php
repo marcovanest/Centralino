@@ -18,7 +18,7 @@ class Manager
 
     public function transactionStart()
     {
-        if( $this->inTransaction()) {
+        if($this->inTransaction()) {
             throw new \Exception("already in transaction", 1);
         }
 

@@ -15,8 +15,8 @@ class Connection
 
         $driver     = new $class($host, $port, $dbname, $dbuser, $dbpass, $options);
 
-        $connection = new PDO\Connection($driver);
+        $connection = new PDO\PDOConnection($driver);
 
-        return new PDO\Manager($connection);
+        return new PDO\Manager($connection->create());
     }
 }
