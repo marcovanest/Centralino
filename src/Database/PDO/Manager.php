@@ -16,6 +16,21 @@ class Manager
         $this->pdoInstance = $pdo;
     }
 
+    public function select($statement, $params = array())
+    {
+        $statement = $this->prep($statement);
+    }
+
+    public function update($statement, $params = array())
+    {
+        $statement = $this->prep($statement);
+    }
+
+    public function delete($statement, $params = array())
+    {
+        $statement = $this->prep($statement);
+    }
+
     public function transactionStart()
     {
         if($this->inTransaction()) {
@@ -50,5 +65,15 @@ class Manager
     public function inTransaction()
     {
         return Utility\CentralinoBoolean::create($this->pdoInstance->inTransaction());
+    }
+
+    private function prep($statement, $params = array())
+    {
+        $string         = Utility\CentralinoString::create($statement);
+        $params         = Utility\CentralinoArray::create($params);
+
+        $pdoStatement   = $this->pdoInstance->prepare($string);
+
+        return new PDOStatement($pdoStatement, $params);
     }
 }

@@ -4,21 +4,21 @@ namespace Centralino\Database\PDO;
 use Centralino\Database;
 use Psr\Log;
 
-class Statement extends \PDOStatement
+class PDOStatement
 {
     CONST DEFAULT_FETCH_MODE = \PDO::FETCH_OBJ;
 
-    private $handle;
-    private $sqlStatement;
     private $pdoStatement;
+    private $sqlStatement;
+    private $sqlStatementParams;
     private $fetchMode = self::DEFAULT_FETCH_MODE;
     private $fetchParam = null;
 
-    public function __construct(\PDO $handle, $sqlStatement, $options = array())
+    public function __construct(\PDOStatement $statement, \Centralino\Utility\CentralinoArray $params = null)
     {
-        $this->handle       = $handle;
-        $this->sqlStatement = $sqlStatement;
-        $this->pdoStatement = $this->handle->prepare($sqlStatement, $options);
+        $this->pdoStatement         = $statement;
+        $this->sqlStatement         = $this->pdoStatement->queryString;
+        $this->sqlStatementParams   = $params;
     }
 
     public function setFetchMode($mode, $param = null)

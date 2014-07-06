@@ -7,7 +7,7 @@ class GetChildrenTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetChildren_Return_CentralinoArray_Instance()
     {
-        $array = new Utility\CentralinoArray(array(1, 2, array(3,4,5)));
+        $array = Utility\CentralinoArray::create(array(1, 2, array(3,4,5)));
         $array->seek(2);
         $child = $array->getChildren();
 
@@ -16,7 +16,7 @@ class GetChildrenTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildren_No_Children_Return_False()
     {
-        $array = new Utility\CentralinoArray(array(1, 2, array(3,4,5)));
+        $array = Utility\CentralinoArray::create(array(1, 2, array(3,4,5)));
         $array->seek(1);
         $this->assertFalse($array->getChildren());
     }

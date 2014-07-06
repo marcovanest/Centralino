@@ -36,7 +36,7 @@ class Wrapper implements WrapperInterface
             throw new Database\DatabaseException('Statement must be string', Log\LogLevel::CRITICAL);
         }
 
-        $this->statement = new Statement($this->pdoInstance, $statement);
+        $this->statement = new PDOStatement($this->pdoInstance, $statement);
 
         return $this->statement;
     }

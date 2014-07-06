@@ -12,7 +12,7 @@ class CentralinoArray implements
 
     private $position;
 
-    public function __construct(array $array)
+    private function __construct(array $array)
     {
         if( ! static::isArray($array)) {
             throw new UtilityException('Invalid array');
@@ -21,6 +21,11 @@ class CentralinoArray implements
         $this->array = (array) $array;
 
         $this->position = 0;
+    }
+
+    public static function create($boolean)
+    {
+        return new self($boolean);
     }
 
     public function get()

@@ -7,13 +7,18 @@ class CentralinoString
 
     private $string;
 
-    public function __construct($string)
+    private function __construct($string)
     {
         if( ! static::isString($string)) {
             throw new UtilityException("Invalid string given");
         }
 
         $this->string = $string;
+    }
+
+    public static function create($string)
+    {
+        return new self($string);
     }
 
     public function __toString()

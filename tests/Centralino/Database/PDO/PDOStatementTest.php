@@ -6,7 +6,7 @@ use Tests;
 
 require_once('PDOUtility.php');
 
-class StatementTest extends \PHPUnit_Framework_TestCase
+class PDOStatementTest extends \PHPUnit_Framework_TestCase
 {
     private $pdoUtility;
 
@@ -20,17 +20,20 @@ class StatementTest extends \PHPUnit_Framework_TestCase
     */
     public function testSetFetchMode_With_Invalid_Mode_Throws()
     {
-        $wrapper   = new Centralino\Database\PDO\Wrapper($this->pdoUtility->getPDOStub());
-        $statement  = $wrapper->prepare('SELECT * FROM LOG');
+        $stmStub = $this->getMockBuilder('PDOStatement')
+                    ->getMock();
+
+        $statement = new PDOStatement($stmStub);
         $statement->setFetchMode(12);
     }
 
     public function testSetFetchMode_With_Valid_Mode()
     {
-        $wrapper   = new Centralino\Database\PDO\Wrapper($this->pdoUtility->getPDOStub());
-        $statement  = $wrapper->prepare('SELECT * FROM LOG');
-        $statement->setFetchMode(\PDO::FETCH_OBJ);
+        $stmStub = $this->getMockBuilder('PDOStatement')
+                    ->getMock();
 
+        $statement = new PDOStatement($stmStub);
+        $statement->setFetchMode(\PDO::FETCH_OBJ);
         $this->assertEquals(\PDO::FETCH_OBJ, $statement->getFetchMode());
     }
 
@@ -40,8 +43,22 @@ class StatementTest extends \PHPUnit_Framework_TestCase
     */
     public function testExecute_With_Wrong_Param_Count_Throws($statement, $params)
     {
-        $wrapper   = new Centralino\Database\PDO\Wrapper($this->pdoUtility->getPDOStub());
-        $statement  = $wrapper->prepare($statement);
+        // $wrapper   = new Centralino\Database\PDO\Wrapper($this->pdoUtility->getPDOStub());
+        // $statement  = $wrapper->prepare($statement);
+        // $statement->execute($params);
+
+        $stmStub = $this->getMockBuilder('\PDOStatement')
+                        ->getMock();
+
+        $PDOstub = $this->getMockBuilder('Centralino\Database\PDO\_files\PDOMock')
+                    ->getMock();
+
+        $PDOstub->expects($this->any())
+                    ->method('prepare')
+                    ->with($this->stringContains($statement))
+                    ->will($this->returnValue($stmStub));
+
+        $statement = new PDOStatement($stmStub);
         $statement->execute($params);
     }
 

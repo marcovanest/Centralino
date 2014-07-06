@@ -7,7 +7,7 @@ class GetTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $string = new Utility\CentralinoString("Iñtërnâtiônàlizætiøn");
+        $string = Utility\CentralinoString::create("Iñtërnâtiônàlizætiøn");
         $this->assertEquals('Iñtërnâtiônàlizætiøn', $string->get());
     }
 }
