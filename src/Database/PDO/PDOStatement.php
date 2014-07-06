@@ -55,13 +55,6 @@ class PDOStatement
 
     public function execute($aParams = array())
     {
-        $sqlStatementParamHolderCount = substr_count($this->sqlStatement, '?');
-        $paramCount = count($aParams);
-
-        if($sqlStatementParamHolderCount != $paramCount) {
-            throw new Database\DatabaseException('Wrong parameter count', Log\LogLevel::CRITICAL);
-        }
-
         try {
             return $this->pdoStatement->execute($aParams);
         }catch(\PDOException $exception) {

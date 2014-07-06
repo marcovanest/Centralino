@@ -1,7 +1,9 @@
 <?php
 namespace Centralino\Database\PDO;
 
+use Centralino\Database;
 use Centralino\Utility;
+use Psr\Log;
 
 class Manager
 {
@@ -18,17 +20,35 @@ class Manager
 
     public function select($statement, $params = array())
     {
-        $statement = $this->prep($statement);
+        $result = $this->isValidStatement($statement, $params);
+
+        if($result->isTrue()) {
+            $statement = $this->prep($statement, $params);
+        }else{
+            throw new Database\DatabaseException('Invalid select statement', Log\LogLevel::CRITICAL);
+        }
     }
 
     public function update($statement, $params = array())
     {
-        $statement = $this->prep($statement);
+        $result = $this->isValidStatement($statement, $params);
+
+        if($result->isTrue()) {
+            $statement = $this->prep($statement, $params);
+        }else{
+            throw new Database\DatabaseException('Invalid update statement', Log\LogLevel::CRITICAL);
+        }
     }
 
     public function delete($statement, $params = array())
     {
-        $statement = $this->prep($statement);
+        $result = $this->isValidStatement($statement, $params);
+
+        if($result->isTrue()) {
+            $statement = $this->prep($statement, $params);
+        }else{
+            throw new Database\DatabaseException('Invalid delete statement', Log\LogLevel::CRITICAL);
+        }
     }
 
     public function transactionStart()
@@ -69,11 +89,18 @@ class Manager
 
     private function prep($statement, $params = array())
     {
-        $string         = Utility\CentralinoString::create($statement);
+        $pdoStatement = $this->pdoInstance->prepare($sqlStatement->get());
+        return new PDOStatement($pdoStatement, $params);
+    }
+
+    private function isValidStatement($statement, $params)
+    {
+        $sqlStatement   = Utility\CentralinoString::create($statement);
         $params         = Utility\CentralinoArray::create($params);
 
-        $pdoStatement   = $this->pdoInstance->prepare($string);
+        $sqlStatementParamHolderCount   = substr_count($sqlStatement->get(), '?');
+        $paramCount                     = count($params);
 
-        return new PDOStatement($pdoStatement, $params);
+        return Utility\CentralinoBoolean::create($sqlStatementParamHolderCount === $paramCount);
     }
 }
