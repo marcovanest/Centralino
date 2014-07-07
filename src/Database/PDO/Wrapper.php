@@ -33,7 +33,7 @@ class Wrapper implements WrapperInterface
 
     public function prepare($statement, $options = array())
     {
-        if ( ! Utility\CentralinoString::isString($statement)) {
+        if (! Utility\CentralinoString::isString($statement)) {
             throw new Database\DatabaseException('Statement must be string', Log\LogLevel::CRITICAL);
         }
 
@@ -44,8 +44,8 @@ class Wrapper implements WrapperInterface
 
     public function select(
         $sqlStatement = '',
-        $sqlParams  = array(),
-        $fetchMode  = self::DEFAULT_FETCH_MODE,
+        $sqlParams = array(),
+        $fetchMode = self::DEFAULT_FETCH_MODE,
         $fetchParam = null
     ) {
         $statement = $this->prepareAndExecute($sqlStatement, $sqlParams);

@@ -17,7 +17,13 @@ class PDOConnection
     public function create()
     {
         try {
-            $pdo = new \PDO($this->driver->getDsn(), $this->driver->getDBUser(), $this->driver->getDBPass(), $this->driver->getDBOptions());
+            $pdo = new \PDO(
+                $this->driver->getDsn(),
+                $this->driver->getDBUser(),
+                $this->driver->getDBPass(),
+                $this->driver->getDBOptions()
+            );
+            
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, self::DEFAULT_ERROR_MODE);
             $pdo->query("SET NAMES 'utf8'");
         } catch (\PDOException $exception) {

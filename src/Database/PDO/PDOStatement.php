@@ -6,7 +6,7 @@ use Psr\Log;
 
 class PDOStatement
 {
-    CONST DEFAULT_FETCH_MODE = \PDO::FETCH_OBJ;
+    const DEFAULT_FETCH_MODE = \PDO::FETCH_OBJ;
 
     private $pdoStatement;
     private $sqlStatement;
@@ -23,7 +23,7 @@ class PDOStatement
 
     public function setFetchMode($mode, $param = null)
     {
-        if( ! in_array($mode, array(
+        if (! in_array($mode, array(
             \PDO::FETCH_ASSOC,
             \PDO::FETCH_BOTH,
             \PDO::FETCH_BOUND,
@@ -41,9 +41,9 @@ class PDOStatement
         $this->fetchMode    = $mode;
         $this->fetchParam   = $param;
 
-        if( empty($this->fetchParam)) {
+        if (empty($this->fetchParam)) {
             $this->pdoStatement->setFetchMode($this->fetchMode);
-        }else {
+        } else {
             $this->pdoStatement->setFetchMode($this->fetchMode, $this->fetchParam);
         }
     }
@@ -57,7 +57,7 @@ class PDOStatement
     {
         try {
             return $this->pdoStatement->execute($this->sqlStatementParams->get());
-        }catch(\PDOException $exception) {
+        } catch (\PDOException $exception) {
             throw new Database\DatabaseException('Statement failed to execute', Log\LogLevel::CRITICAL);
         }
     }
@@ -67,9 +67,9 @@ class PDOStatement
         return $this->pdoStatement->rowCount();
     }
 
-    public function nextRow($cursor_orientation = \PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
+    public function nextRow($cursorOrientation = \PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
     {
-        return $this->pdoStatement->fetch($this->fetchMode, $cursor_orientation, $cursor_offset);
+        return $this->pdoStatement->fetch($this->fetchMode, $cursorOrientation, $cursorOffset);
     }
 
     public function allRows()

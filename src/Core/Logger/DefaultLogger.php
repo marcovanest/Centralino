@@ -13,7 +13,7 @@ class DefaultLogger extends Log\AbstractLogger
     {
         $this->logdir = $logDir;
 
-        if( ! is_dir($this->logdir)) {
+        if (! is_dir($this->logdir)) {
             mkdir($this->logdir, 0700, true);
         }
 
@@ -22,24 +22,24 @@ class DefaultLogger extends Log\AbstractLogger
 
     public function log($level, $message, array $context = array())
     {
-        if ( ! $this->checkLogLevel($level) ) {
+        if (! $this->checkLogLevel($level)) {
             throw new Log\InvalidArgumentException();
         }
 
         $replace = array();
         foreach ($context as $key => $value) {
-            if(is_scalar($value)) {
+            if (is_scalar($value)) {
                 $replace['{' . $key . '}'] = (string) $value;
-            }elseif( $value instanceof \Exception) {
+            } elseif ($value instanceof \Exception) {
                 $replace['{' . $key . '}'] = $this->exceptionToString($value);
             }
         }
 
-        $fh = fopen($this->logdir . DS . $this->logName, 'a+');
+        $fileHandle = fopen($this->logdir . DS . $this->logName, 'a+');
 
         $message = strtr($message, $replace);
-        fwrite($fh, $level . " " . $message."\n");
-        fclose($fh);
+        fwrite($fileHandle, $level . " " . $message."\n");
+        fclose($fileHandle);
     }
 
     public function getLogs()
@@ -77,19 +77,19 @@ class DefaultLogger extends Log\AbstractLogger
 
         foreach ($stack as $trace) {
 
-            if(isset($trace['class'])) {
+            if (isset($trace['class'])) {
                 $traceString .=  " class -> " . $trace['class'] . "\n";
             }
 
-            if(isset($trace['function'])) {
+            if (isset($trace['function'])) {
                 $traceString .=  " function -> " . $trace['function'] . "\n";
             }
 
-            if(isset($trace['line'])) {
+            if (isset($trace['line'])) {
                 $traceString .=  " line -> " . $trace['line'] . "\n";
             }
 
-            if(isset($trace['file'])) {
+            if (isset($trace['file'])) {
                 $traceString .=  " file -> " . $trace['file'] . "\n";
             }
 

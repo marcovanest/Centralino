@@ -14,7 +14,7 @@ class CentralinoArray implements
 
     private function __construct(array $array)
     {
-        if( ! static::isArray($array)) {
+        if (! static::isArray($array)) {
             throw new UtilityException('Invalid array');
         }
 
@@ -56,7 +56,9 @@ class CentralinoArray implements
     {
         $keys = $this->keys();
 
-        if (array_key_exists($this->position, $keys) === false) {
+        $keyExists = CentralinoBoolean::create(array_key_exists($this->position, $keys));
+
+        if ($keyExists->isFalse()) {
             throw new \OutOfBoundsException();
         }
 
@@ -84,12 +86,12 @@ class CentralinoArray implements
 
     public function valid()
     {
-        $key = isset(array_keys($this->array)[$this->position]);
-        if($key) {
-            return isset($this->array[$this->key()]);
-        }else {
+        $key = CentralinoBoolean::create(isset(array_keys($this->array)[$this->position]));
+        if ($key->isFalse()) {
             return false;
         }
+
+        return isset($this->array[$this->key()]);
     }
 
     public function hasChildren()
@@ -99,10 +101,11 @@ class CentralinoArray implements
 
     public function getChildren()
     {
-        if($this->hasChildren()) {
-            return new self($this->array[$this->key()]);
+        $hasChilderen = CentralinoBoolean::create(isset(array_keys($this->array)[$this->position]));
+        if ($hasChilderen->isFalse()) {
+            return false;
         }
-        return false;
+        return new self($this->array[$this->key()]);
     }
 
     public function offsetSet($key, $value)
@@ -122,7 +125,7 @@ class CentralinoArray implements
 
     public function offsetUnset($key)
     {
-       unset($this->array[$key]);
+        unset($this->array[$key]);
     }
 
     public function count()

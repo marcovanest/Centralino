@@ -10,13 +10,18 @@ class CentralinoDateTime
 
     private $timezone;
 
-    public function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
+    private function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
     {
         try {
             $this->datetime = new \DateTime($dateTimeString, $dateTimeZone);
         } catch (\Exception $exception) {
             throw new UtilityException("Invalid date given");
         }
+    }
+
+    public static function create($dateTimeString, $dateTimeZone)
+    {
+        new self($dateTimeString, $dateTimeZone);
     }
 
     public function __toString()
@@ -101,13 +106,13 @@ class CentralinoDateTime
 
     public function formatDateTime($formatSpecified, \DateTimeZone $dateTimeZone = null)
     {
-        if( ! is_null($dateTimeZone)) {
+        if (! is_null($dateTimeZone)) {
             $this->datetime->setTimeZone($dateTimeZone);
         }
 
         try {
             return $this->datetime->format($formatSpecified);
-        }catch(\UtilityException $exception) {
+        } catch (\UtilityException $exception) {
             throw $exception;
         }
     }

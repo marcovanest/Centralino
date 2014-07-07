@@ -3,9 +3,7 @@ namespace Centralino\Database;
 
 use Centralino\Core;
 
-class DatabaseException
-    extends Core\Exception\CustomException
-    implements Core\Exception\LoggableExceptionInterface
+class DatabaseException extends Core\Exception\CustomException implements Core\Exception\LoggableExceptionInterface
 {
     private $level = null;
 

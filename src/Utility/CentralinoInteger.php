@@ -39,7 +39,7 @@ class CentralinoInteger
 
     public function div($divide)
     {
-        if(static::isInteger($divide)) {
+        if (static::isInteger($divide)) {
             $this->int = ($this->int / $divide);
             return true;
         }

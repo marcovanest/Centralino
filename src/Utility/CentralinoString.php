@@ -9,7 +9,7 @@ class CentralinoString
 
     private function __construct($string)
     {
-        if ( ! static::isString($string)) {
+        if (! static::isString($string)) {
             throw new UtilityException("Invalid string given");
         }
 
@@ -69,7 +69,7 @@ class CentralinoString
         return mb_strpos($this->string, $needle, $offset, self::CHAR_ENCODING);
     }
 
-    public function LastOccurrence($needle, CentralinoInteger $offset = null)
+    public function lastOccurrence($needle, CentralinoInteger $offset = null)
     {
         $stringNeedle = new self($needle);
         if (empty($stringNeedle->get())) {
@@ -85,9 +85,9 @@ class CentralinoString
         return mb_strrpos($this->string, $needle, $offset, self::CHAR_ENCODING);
     }
 
-    public function trim($character_mask = " \t\n\r\0\x0B")
+    public function trim($characterMask = " \t\n\r\0\x0B")
     {
-        $this->string = trim($this->string, $character_mask);
+        $this->string = trim($this->string, $characterMask);
         return $this;
     }
 

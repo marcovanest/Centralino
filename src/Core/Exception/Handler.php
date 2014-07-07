@@ -14,7 +14,7 @@ class Handler
 
     public function handleException(\Exception $exception)
     {
-        if($exception instanceof LoggableExceptionInterface) {
+        if ($exception instanceof LoggableExceptionInterface) {
             $this->logger->log($exception->getLogLevel(), $exception->getMessage());
         }
 

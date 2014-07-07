@@ -7,7 +7,7 @@ class CentralinoBoolean
 
     private function __construct($boolean)
     {
-        if ( ! static::isBool($boolean)) {
+        if (! static::isBool($boolean)) {
             throw new UtilityException('Invalid boolean');
         }
 

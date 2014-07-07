@@ -9,7 +9,7 @@ class CentralinoFloat
 
     public function __construct($float)
     {
-        if ( ! static::isFloat($float)) {
+        if (! static::isFloat($float)) {
             throw new UtilityException('Invalid float');
         }
 
@@ -32,7 +32,7 @@ class CentralinoFloat
 
     public function sub($sub)
     {
-        if(static::isFloat($sub) || CentralinoInteger::isInteger($sub)) {
+        if (static::isFloat($sub) || CentralinoInteger::isInteger($sub)) {
             $this->float = $this->float - $sub;
             return true;
         }
@@ -41,7 +41,7 @@ class CentralinoFloat
 
     public function div($div)
     {
-        if(static::isFloat($div) || CentralinoInteger::isInteger($div)) {
+        if (static::isFloat($div) || CentralinoInteger::isInteger($div)) {
             $this->float = $this->float / $div;
             return true;
         }
