@@ -1,24 +1,19 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoString
+class CentralinoString extends UtilityAbstract implements UtilityInterface
 {
     const CHAR_ENCODING = 'UTF-8';
 
     private $string;
 
-    private function __construct($string)
+    public function __construct($string)
     {
-        if (! static::isString($string)) {
-            throw new UtilityException("Invalid string given");
+        if (! $this->isString($string)) {
+            $this->throwException('Invalid string');
         }
 
         $this->string = $string;
-    }
-
-    public static function create($string)
-    {
-        return new self($string);
     }
 
     public function __toString()
@@ -45,9 +40,8 @@ class CentralinoString
 
     public function countOccurrences($needle)
     {
-        $stringNeedle = new self($needle);
-        if (empty($stringNeedle->get())) {
-            throw new UtilityException("Invalid needle given");
+        if ($this->isEmptyString($needle) === true || $this->isString($needle) === false) {
+            $this->throwException('Invalid needle given');
         }
 
         return mb_substr_count($this->string, $needle, self::CHAR_ENCODING);
@@ -55,15 +49,14 @@ class CentralinoString
 
     public function firstOccurrence($needle, CentralinoInteger $offset = null)
     {
-        $stringNeedle = new self($needle);
-        if (empty($stringNeedle->get())) {
-            throw new UtilityException("Invalid needle given");
+        if ($this->isEmptyString($needle) === true || $this->isString($needle) === false) {
+            $this->throwException('Invalid needle given');
         }
 
         $offset = ! is_null($offset) ? $offset->get() : null;
 
         if (! is_null($offset) && $offset > $this->getLength()) {
-            throw new UtilityException("Invalid offset given");
+            $this->throwException('Invalid offset given');
         }
 
         return mb_strpos($this->string, $needle, $offset, self::CHAR_ENCODING);
@@ -71,15 +64,14 @@ class CentralinoString
 
     public function lastOccurrence($needle, CentralinoInteger $offset = null)
     {
-        $stringNeedle = new self($needle);
-        if (empty($stringNeedle->get())) {
-            throw new UtilityException("Invalid needle given");
+        if ($this->isEmptyString($needle) === true || $this->isString($needle) === false) {
+            $this->throwException('Invalid needle given');
         }
 
         $offset = ! is_null($offset) ? $offset->get() : null;
 
         if (! is_null($offset) && $offset > $this->getLength()) {
-            throw new UtilityException("Invalid offset given");
+            $this->throwException('Invalid offset given');
         }
 
         return mb_strrpos($this->string, $needle, $offset, self::CHAR_ENCODING);
@@ -89,6 +81,11 @@ class CentralinoString
     {
         $this->string = trim($this->string, $characterMask);
         return $this;
+    }
+
+    private static function isEmptyString($string)
+    {
+        return $string === "";
     }
 
     public static function isString($string)

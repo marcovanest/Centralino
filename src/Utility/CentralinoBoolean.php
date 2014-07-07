@@ -1,22 +1,17 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoBoolean
+class CentralinoBoolean extends UtilityAbstract implements UtilityInterface
 {
     private $boolean;
 
-    private function __construct($boolean)
+    public function __construct($boolean)
     {
-        if (! static::isBool($boolean)) {
+        if (! $this->isBool($boolean)) {
             throw new UtilityException('Invalid boolean');
         }
 
         $this->boolean = (bool) $boolean;
-    }
-
-    public static function create($boolean)
-    {
-        return new self($boolean);
     }
 
     public function get()

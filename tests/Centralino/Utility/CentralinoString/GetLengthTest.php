@@ -7,19 +7,19 @@ class GetLengthTest extends \PHPUnit_Framework_TestCase
 {
     public function testLength()
     {
-        $string = Utility\CentralinoString::create("Iñtërnâtiônàlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiônàlizætiøn");
         $this->assertEquals(20, $string->getLength());
     }
 
     public function testLenght_Only_ASCII_Characters()
     {
-        $string = Utility\CentralinoString::create("Internationalization");
+        $string = new Utility\CentralinoString("Internationalization");
         $this->assertEquals(20, $string->getLength());
     }
 
     public function testLength_Empty()
     {
-        $string = Utility\CentralinoString::create("");
+        $string = new Utility\CentralinoString("");
         $this->assertEquals(0, $string->getLength());
     }
 }

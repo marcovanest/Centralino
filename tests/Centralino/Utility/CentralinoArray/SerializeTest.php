@@ -7,13 +7,13 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
 {
     public function testSerialize()
     {
-        $array = Utility\CentralinoArray::create(array(1, 2, 3));
+        $array = new Utility\CentralinoArray(array(1, 2, 3));
         $this->assertEquals('a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}', $array->serialize());
     }
 
     public function testUnserialize()
     {
-        $array = Utility\CentralinoArray::create(array());
+        $array = new Utility\CentralinoArray(array());
         $array->unserialize('a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}');
 
         $this->assertEquals(array(1, 2, 3), $array->get());

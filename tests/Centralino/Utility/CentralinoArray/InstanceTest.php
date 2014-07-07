@@ -10,6 +10,6 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     */
     public function testCentralinoArray_Invalid_Array_Throws()
     {
-        $array = Utility\CentralinoArray::create("test");
+        $array = new Utility\CentralinoArray("test");
     }
 }

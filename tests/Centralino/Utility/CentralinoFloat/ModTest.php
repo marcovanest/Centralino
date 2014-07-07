@@ -10,9 +10,7 @@ class ModTest extends \PHPUnit_Framework_TestCase
         $float = new Utility\CentralinoFloat(123.12);
 
         $mod = $float->mod(5);
-        $this->assertInstanceOf('Centralino\Utility\CentralinoFloat', $mod);
-
-        $this->assertEquals(3.12, $mod->get());
+        $this->assertEquals(3.12, $mod);
     }
 
     public function testMod_Valid_Negative_Mod()
@@ -20,9 +18,7 @@ class ModTest extends \PHPUnit_Framework_TestCase
         $float = new Utility\CentralinoFloat(123.12);
 
         $mod = $float->mod(-5);
-        $this->assertInstanceOf('Centralino\Utility\CentralinoFloat', $mod);
-
-        $this->assertEquals(3.12, $mod->get());
+        $this->assertEquals(3.12, $mod);
     }
 
     public function testMod_InValid_Mod()

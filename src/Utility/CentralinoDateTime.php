@@ -1,7 +1,7 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoDateTime
+class CentralinoDateTime extends UtilityAbstract implements UtilityInterface
 {
     const DATE_FORMAT     = 'Y-m-d';
     const TIME_FORMAT     = 'H:i:s';
@@ -10,18 +10,18 @@ class CentralinoDateTime
 
     private $timezone;
 
-    private function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
+    public function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
     {
         try {
             $this->datetime = new \DateTime($dateTimeString, $dateTimeZone);
         } catch (\Exception $exception) {
-            throw new UtilityException("Invalid date given");
+            $this->throwException('Invalid date given');
         }
     }
 
-    public static function create($dateTimeString, $dateTimeZone)
+    public function get()
     {
-        new self($dateTimeString, $dateTimeZone);
+        return $this->getDateTime();
     }
 
     public function __toString()
@@ -46,62 +46,62 @@ class CentralinoDateTime
 
     public function addDays($days)
     {
-        $this->addAmount('P', $days, 'D');
+        $this->addPeriodAmount('P', $days, 'D');
     }
 
     public function subDays($days)
     {
-        $this->subAmount('P', $days, 'D');
+        $this->subPeriodAmount('P', $days, 'D');
     }
 
     public function addMonths($months)
     {
-        $this->addAmount('P', $months, 'M');
+        $this->addPeriodAmount('P', $months, 'M');
     }
 
     public function subMonths($months)
     {
-        $this->subAmount('P', $months, 'M');
+        $this->subPeriodAmount('P', $months, 'M');
     }
 
     public function addYears($years)
     {
-        $this->addAmount('P', $years, 'Y');
+        $this->addPeriodAmount('P', $years, 'Y');
     }
 
     public function subYears($years)
     {
-        $this->subAmount('P', $years, 'Y');
+        $this->subPeriodAmount('P', $years, 'Y');
     }
 
     public function addSeconds($seconds)
     {
-        $this->addAmount('PT', $seconds, 'S');
+        $this->addPeriodAmount('PT', $seconds, 'S');
     }
 
     public function subSeconds($seconds)
     {
-        $this->subAmount('PT', $seconds, 'S');
+        $this->subPeriodAmount('PT', $seconds, 'S');
     }
 
     public function addMinutes($minutes)
     {
-        $this->addAmount('PT', $minutes, 'M');
+        $this->addPeriodAmount('PT', $minutes, 'M');
     }
 
     public function subMinutes($seconds)
     {
-        $this->subAmount('PT', $seconds, 'M');
+        $this->subPeriodAmount('PT', $seconds, 'M');
     }
 
     public function addHours($hours)
     {
-        $this->addAmount('PT', $hours, 'H');
+        $this->addPeriodAmount('PT', $hours, 'H');
     }
 
     public function subHours($seconds)
     {
-        $this->subAmount('PT', $seconds, 'H');
+        $this->subPeriodAmount('PT', $seconds, 'H');
     }
 
     public function formatDateTime($formatSpecified, \DateTimeZone $dateTimeZone = null)
@@ -132,27 +132,29 @@ class CentralinoDateTime
         return $this->datetime->getOffset();
     }
 
-    private function addAmount($period, $amount, $perioddesignator)
+    private function addPeriodAmount($period, $amount, $perioddesignator)
     {
+        if (CentralinoInteger::isInteger($amount) === false) {
+            $this->throwException('Invalid period amount; Not a integer');
+        }
+
         try {
-            $amount = new CentralinoInteger($amount);
-            $this->datetime->add(new \DateInterval($period.$amount->get().$perioddesignator));
-        } catch (UtilityException $exception) {
-            throw new UtilityException('Invalid amount; Not a integer');
+            $this->datetime->add(new \DateInterval($period.$amount.$perioddesignator));
         } catch (\Exception $exception) {
-            throw new UtilityException('Invalid add amount');
+            $this->throwException('Invalid add period amount');
         }
     }
 
-    private function subAmount($period, $amount, $perioddesignator)
+    private function subPeriodAmount($period, $amount, $perioddesignator)
     {
+        if (CentralinoInteger::isInteger($amount) === false) {
+            $this->throwException('Invalid period amount; Not a integer');
+        }
+
         try {
-            $amount = new CentralinoInteger($amount);
-            $this->datetime->sub(new \DateInterval($period.$amount->get().$perioddesignator));
-        } catch (UtilityException $exception) {
-            throw new UtilityException('Invalid amount; Not a integer');
+            $this->datetime->sub(new \DateInterval($period.$amount.$perioddesignator));
         } catch (\Exception $exception) {
-            throw new UtilityException('Invalid sub amount');
+            $this->throwException('Invalid sub period amount');
         }
     }
 }

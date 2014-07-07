@@ -1,31 +1,27 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoArray implements
+class CentralinoArray extends UtilityAbstract implements
     \SeekableIterator,
     \RecursiveIterator,
     \ArrayAccess,
     \Countable,
-    \Serializable
+    \Serializable,
+    UtilityInterface
 {
     private $array;
 
     private $position;
 
-    private function __construct(array $array)
+    public function __construct(array $array)
     {
-        if (! static::isArray($array)) {
-            throw new UtilityException('Invalid array');
+        if (! $this->isArray($array)) {
+            $this->throwException('Invalid array');
         }
 
         $this->array = (array) $array;
 
         $this->position = 0;
-    }
-
-    public static function create($boolean)
-    {
-        return new self($boolean);
     }
 
     public function get()
@@ -56,7 +52,7 @@ class CentralinoArray implements
     {
         $keys = $this->keys();
 
-        $keyExists = CentralinoBoolean::create(array_key_exists($this->position, $keys));
+        $keyExists = new CentralinoBoolean(array_key_exists($this->position, $keys));
 
         if ($keyExists->isFalse()) {
             throw new \OutOfBoundsException();
@@ -86,7 +82,7 @@ class CentralinoArray implements
 
     public function valid()
     {
-        $key = CentralinoBoolean::create(isset(array_keys($this->array)[$this->position]));
+        $key = new CentralinoBoolean(isset(array_keys($this->array)[$this->position]));
         if ($key->isFalse()) {
             return false;
         }
@@ -101,11 +97,10 @@ class CentralinoArray implements
 
     public function getChildren()
     {
-        $hasChilderen = CentralinoBoolean::create(isset(array_keys($this->array)[$this->position]));
-        if ($hasChilderen->isFalse()) {
-            return false;
+        if ($this->hasChildren()) {
+            return new CentralinoArray($this->array[$this->key()]);
         }
-        return new self($this->array[$this->key()]);
+        return false;
     }
 
     public function offsetSet($key, $value)

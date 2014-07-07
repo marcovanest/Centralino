@@ -10,19 +10,19 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     */
     public function testCentralinoString_Invalid_String_Throws()
     {
-        $string = Utility\CentralinoString::create("Iñtërnâtiôn\xe9àlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiôn\xe9àlizætiøn");
     }
 
     public function testCentralinoString_Valid()
     {
-        $string = Utility\CentralinoString::create("Iñtërnâtiônàlizætiøn");
+        $string = new Utility\CentralinoString("Iñtërnâtiônàlizætiøn");
 
         $this->assertInstanceOf('\Centralino\Utility\CentralinoString', $string);
     }
 
     public function testCentralinoString_Empty()
     {
-        $string = Utility\CentralinoString::create("");
+        $string = new Utility\CentralinoString("");
 
         $this->assertInstanceOf('\Centralino\Utility\CentralinoString', $string);
     }

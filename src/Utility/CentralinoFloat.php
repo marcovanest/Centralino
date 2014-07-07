@@ -1,7 +1,7 @@
 <?php
 namespace Centralino\Utility;
 
-class CentralinoFloat
+class CentralinoFloat extends UtilityAbstract implements UtilityInterface
 {
     const PRECISION = 2;
 
@@ -9,8 +9,8 @@ class CentralinoFloat
 
     public function __construct($float)
     {
-        if (! static::isFloat($float)) {
-            throw new UtilityException('Invalid float');
+        if (! $this->isFloat($float)) {
+            $this->throwException('Invalid float');
         }
 
         $this->float = (float) $float;
@@ -23,7 +23,7 @@ class CentralinoFloat
 
     public function add($add)
     {
-        if (static::isFloat($add) || CentralinoInteger::isInteger($add)) {
+        if ($this->isValidModifier($add)) {
             $this->float = $this->float + $add;
             return true;
         }
@@ -32,7 +32,7 @@ class CentralinoFloat
 
     public function sub($sub)
     {
-        if (static::isFloat($sub) || CentralinoInteger::isInteger($sub)) {
+        if ($this->isValidModifier($sub)) {
             $this->float = $this->float - $sub;
             return true;
         }
@@ -41,7 +41,7 @@ class CentralinoFloat
 
     public function div($div)
     {
-        if (static::isFloat($div) || CentralinoInteger::isInteger($div)) {
+        if ($this->isValidModifier($div)) {
             $this->float = $this->float / $div;
             return true;
         }
@@ -50,7 +50,7 @@ class CentralinoFloat
 
     public function mul($mul)
     {
-        if (static::isFloat($mul) || CentralinoInteger::isInteger($mul)) {
+        if ($this->isValidModifier($mul)) {
             $this->float = $this->float * $mul;
             return true;
         }
@@ -59,22 +59,20 @@ class CentralinoFloat
 
     public function mod($modulo)
     {
-        if (static::isFloat($modulo) || CentralinoInteger::isInteger($modulo)) {
-            return new self( fmod($this->float, $modulo) );
+        if ($this->isValidModifier($modulo)) {
+            return fmod($this->float, $modulo);
         }
         return false;
     }
 
     public function pow($pow)
     {
-        if (static::isFloat($pow) || CentralinoInteger::isInteger($pow)) {
+        if ($this->isValidModifier($pow)) {
             $result = pow($this->float, $pow);
 
             if ($this->isFloat($result)) {
                 $this->float = $result;
                 return true;
-            } elseif (CentralinoInteger::isInteger($result)) {
-                return new CentralinoInteger($result);
             }
         }
         return false;
@@ -82,13 +80,13 @@ class CentralinoFloat
 
     public function abs()
     {
-        return new self( abs($this->float) );
+        return abs($this->float);
     }
 
     public function sqrt()
     {
         if ($this->isPositive()) {
-            return new CentralinoFloat(sqrt($this->float));
+            return sqrt($this->float);
         }
         return false;
     }
@@ -101,6 +99,12 @@ class CentralinoFloat
     public function isNegative()
     {
         return $this->float < 0;
+    }
+
+    private function isValidModifier($modifier)
+    {
+        $valid = new CentralinoBoolean($this->isFloat($modifier) || CentralinoInteger::isInteger($modifier));
+        return $valid->get();
     }
 
     public static function isFloat($float)

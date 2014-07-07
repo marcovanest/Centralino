@@ -10,9 +10,8 @@ class AbsTest extends \PHPUnit_Framework_TestCase
         $float = new Utility\CentralinoFloat(-123.12);
 
         $abs = $float->abs();
-        $this->assertInstanceOf('Centralino\Utility\CentralinoFloat', $abs);
         $this->assertEquals(-123.12, $float->get());
-        $this->assertEquals(123.12, $abs->get());
+        $this->assertEquals(123.12, $abs);
     }
 
     public function testAbs_Positive()
@@ -20,8 +19,7 @@ class AbsTest extends \PHPUnit_Framework_TestCase
         $float = new Utility\CentralinoFloat(123.12);
 
         $abs = $float->abs();
-        $this->assertInstanceOf('Centralino\Utility\CentralinoFloat', $abs);
-        $this->assertEquals(123.12, $abs->get());
+        $this->assertEquals(123.12, $abs);
         $this->assertEquals(123.12, $float->get());
     }
 }
