@@ -9,10 +9,6 @@ class Manager
 {
     private $pdoInstance;
 
-    private $transactionStack = array();
-
-    private $transactionId;
-
     public function __construct(\PDO $pdo)
     {
         $this->pdoInstance = $pdo;
@@ -22,44 +18,45 @@ class Manager
     {
         $result = $this->isValidStatement($statement, $params);
 
-        if($result->isTrue()) {
-            $statement = $this->prep($statement, $params);
-        }else{
+        if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid select statement', Log\LogLevel::CRITICAL);
         }
+
+        $statement = $this->prep($statement, $params);
+        return $statement->execute();
     }
 
     public function update($statement, $params = array())
     {
         $result = $this->isValidStatement($statement, $params);
 
-        if($result->isTrue()) {
-            $statement = $this->prep($statement, $params);
-        }else{
+        if ($result->isTrue()) {
             throw new Database\DatabaseException('Invalid update statement', Log\LogLevel::CRITICAL);
         }
+
+        $statement = $this->prep($statement, $params);
     }
 
     public function delete($statement, $params = array())
     {
         $result = $this->isValidStatement($statement, $params);
 
-        if($result->isTrue()) {
-            $statement = $this->prep($statement, $params);
-        }else{
+        if ($result->isTrue()) {
             throw new Database\DatabaseException('Invalid delete statement', Log\LogLevel::CRITICAL);
         }
+
+        $statement = $this->prep($statement, $params);
     }
 
     public function transactionStart()
     {
-        if($this->inTransaction()) {
+        if ($this->inTransaction()) {
             throw new \Exception("already in transaction", 1);
         }
 
         $result = Utility\CentralinoBoolean::create($this->pdoInstance->beginTransaction());
 
-        if($result->isFalse()) {
+        if ($result->isFalse()) {
             throw new \Exception("transaction start failed", 1);
         }
     }
@@ -68,7 +65,7 @@ class Manager
     {
         $result = Utility\CentralinoBoolean::create($this->pdoInstance->commit());
 
-        if($result->isFalse()) {
+        if ($result->isFalse()) {
             throw new \Exception("transaction commit failed", 1);
         }
     }
@@ -77,7 +74,7 @@ class Manager
     {
         $result = Utility\CentralinoBoolean::create($this->pdoInstance->rollback());
 
-        if($result->isFalse()) {
+        if ($result->isFalse()) {
             throw new \Exception("transaction rollback failed", 1);
         }
     }
@@ -89,6 +86,9 @@ class Manager
 
     private function prep($statement, $params = array())
     {
+        $sqlStatement   = Utility\CentralinoString::create($statement);
+        $params         = Utility\CentralinoArray::create($params);
+
         $pdoStatement = $this->pdoInstance->prepare($sqlStatement->get());
         return new PDOStatement($pdoStatement, $params);
     }

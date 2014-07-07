@@ -7,8 +7,8 @@ use Psr\Log;
 
 class Wrapper implements WrapperInterface
 {
-    CONST DEFAULT_FETCH_MODE    = \PDO::FETCH_OBJ;
-    CONST CHAR_ENCODING         = 'utf8mb4';
+    const DEFAULT_FETCH_MODE    = \PDO::FETCH_OBJ;
+    const CHAR_ENCODING         = 'utf8mb4';
 
     /**
      * Database PDO instance, handler
@@ -17,10 +17,11 @@ class Wrapper implements WrapperInterface
 
     private $statement;
 
-    public function __construct(\PDO $pdoInstance) {
+    public function __construct(\PDO $pdoInstance)
+    {
         $this->pdoInstance = $pdoInstance;
 
-        if($this->pdoInstance->getAttribute(\PDO::ATTR_ERRMODE) !== \PDO::ERRMODE_EXCEPTION) {
+        if ($this->pdoInstance->getAttribute(\PDO::ATTR_ERRMODE) !== \PDO::ERRMODE_EXCEPTION) {
             throw new Database\DatabaseException('Wrong PDO error mode', Log\LogLevel::CRITICAL);
         }
     }
@@ -64,15 +65,14 @@ class Wrapper implements WrapperInterface
 
     private function prepareAndExecute(
         $sqlStatement,
-        $sqlParams,
-        $prepareOptions = array(\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL)
+        $sqlParams
     ) {
         try {
             $statement = $this->prepare($sqlStatement);
             $statement->execute($sqlParams);
 
             return $statement;
-        }catch(Database\DatabaseException $exception) {
+        } catch (Database\DatabaseException $exception) {
             throw new Database\DatabaseException('Statement failed to prepare or execute', Log\LogLevel::CRITICAL);
         }
     }

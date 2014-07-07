@@ -22,15 +22,15 @@ class Pgsql extends DriverAbstract implements DriverInterface
     {
         $dsn = $this->getName().':';
 
-        if( ! empty($this->host) ) {
+        if (! empty($this->host)) {
             $dsn .= 'host=' . $this->host . ';';
         }
 
-        if( ! empty($this->port) ) {
+        if (! empty($this->port)) {
             $dsn .= 'port=' . $this->port . ';';
         }
 
-        if( ! empty($this->dbname) ) {
+        if (! empty($this->dbname)) {
             $dsn .= 'dbname=' . $this->dbname . ';';
         }
 

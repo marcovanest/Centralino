@@ -3,18 +3,18 @@ namespace Centralino\Utility;
 
 class CentralinoDateTime
 {
-    CONST DATE_FORMAT     = 'Y-m-d';
-    CONST TIME_FORMAT     = 'H:i:s';
-    CONST DATETIME_FORMAT = 'Y-m-d H:i:s';
-    CONST TIME_ZONE       = 'UTC';
+    const DATE_FORMAT     = 'Y-m-d';
+    const TIME_FORMAT     = 'H:i:s';
+    const DATETIME_FORMAT = 'Y-m-d H:i:s';
+    const TIME_ZONE       = 'UTC';
 
     private $timezone;
 
     public function __construct($dateTimeString = null, \DateTimeZone $dateTimeZone = null)
     {
-        try{
+        try {
             $this->datetime = new \DateTime($dateTimeString, $dateTimeZone);
-        }catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new UtilityException("Invalid date given");
         }
     }
@@ -129,24 +129,24 @@ class CentralinoDateTime
 
     private function addAmount($period, $amount, $perioddesignator)
     {
-        try{
+        try {
             $amount = new CentralinoInteger($amount);
             $this->datetime->add(new \DateInterval($period.$amount->get().$perioddesignator));
-        }catch(UtilityException $exception) {
+        } catch (UtilityException $exception) {
             throw new UtilityException('Invalid amount; Not a integer');
-        }catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new UtilityException('Invalid add amount');
         }
     }
 
     private function subAmount($period, $amount, $perioddesignator)
     {
-        try{
+        try {
             $amount = new CentralinoInteger($amount);
             $this->datetime->sub(new \DateInterval($period.$amount->get().$perioddesignator));
-        }catch(UtilityException $exception) {
+        } catch (UtilityException $exception) {
             throw new UtilityException('Invalid amount; Not a integer');
-        }catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new UtilityException('Invalid sub amount');
         }
     }

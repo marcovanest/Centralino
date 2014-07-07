@@ -7,7 +7,7 @@ class CentralinoInteger
 
     public function __construct($int)
     {
-        if( ! static::isInteger($int)) {
+        if (! static::isInteger($int)) {
             throw new UtilityException('Invalid integer');
         }
 
@@ -21,7 +21,7 @@ class CentralinoInteger
 
     public function add($add)
     {
-        if(static::isInteger($add)) {
+        if (static::isInteger($add)) {
             $this->int = ($this->int + $add);
             return true;
         }
@@ -30,7 +30,7 @@ class CentralinoInteger
 
     public function sub($sub)
     {
-        if(static::isInteger($sub)) {
+        if (static::isInteger($sub)) {
             $this->int = ($this->int - $sub);
             return true;
         }
@@ -48,7 +48,7 @@ class CentralinoInteger
 
     public function mul($multi)
     {
-        if(static::isInteger($multi)) {
+        if (static::isInteger($multi)) {
             $this->int = ($this->int * $multi);
             return true;
         }
@@ -57,7 +57,7 @@ class CentralinoInteger
 
     public function mod($modulo)
     {
-        if(static::isInteger($modulo)) {
+        if (static::isInteger($modulo)) {
             return new self( ($this->int % $modulo) );
         }
         return false;
@@ -65,13 +65,13 @@ class CentralinoInteger
 
     public function pow($pow)
     {
-        if(static::isInteger($pow)) {
+        if (static::isInteger($pow)) {
             $result = pow($this->int, $pow);
 
-            if($this->isInteger($result)) {
+            if ($this->isInteger($result)) {
                 $this->int = $result;
                  return true;
-            }elseif(CentralinoFloat::isFloat($result)) {
+            } elseif (CentralinoFloat::isFloat($result)) {
                 return new CentralinoFloat($result);
             }
         }
@@ -85,7 +85,7 @@ class CentralinoInteger
 
     public function sqrt()
     {
-        if($this->isPositive()) {
+        if ($this->isPositive()) {
             return new CentralinoFloat(sqrt($this->int));
         }
         return false;

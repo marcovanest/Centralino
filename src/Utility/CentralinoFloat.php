@@ -3,13 +3,13 @@ namespace Centralino\Utility;
 
 class CentralinoFloat
 {
-    CONST PRECISION = 2;
+    const PRECISION = 2;
 
     private $float;
 
     public function __construct($float)
     {
-        if( ! static::isFloat($float)) {
+        if ( ! static::isFloat($float)) {
             throw new UtilityException('Invalid float');
         }
 
@@ -23,7 +23,7 @@ class CentralinoFloat
 
     public function add($add)
     {
-        if(static::isFloat($add) || CentralinoInteger::isInteger($add)) {
+        if (static::isFloat($add) || CentralinoInteger::isInteger($add)) {
             $this->float = $this->float + $add;
             return true;
         }
@@ -50,7 +50,7 @@ class CentralinoFloat
 
     public function mul($mul)
     {
-        if(static::isFloat($mul) || CentralinoInteger::isInteger($mul)) {
+        if (static::isFloat($mul) || CentralinoInteger::isInteger($mul)) {
             $this->float = $this->float * $mul;
             return true;
         }
@@ -59,7 +59,7 @@ class CentralinoFloat
 
     public function mod($modulo)
     {
-        if(static::isFloat($modulo) || CentralinoInteger::isInteger($modulo)) {
+        if (static::isFloat($modulo) || CentralinoInteger::isInteger($modulo)) {
             return new self( fmod($this->float, $modulo) );
         }
         return false;
@@ -67,13 +67,13 @@ class CentralinoFloat
 
     public function pow($pow)
     {
-        if(static::isFloat($pow) || CentralinoInteger::isInteger($pow)) {
+        if (static::isFloat($pow) || CentralinoInteger::isInteger($pow)) {
             $result = pow($this->float, $pow);
 
-            if($this->isFloat($result)) {
+            if ($this->isFloat($result)) {
                 $this->float = $result;
                 return true;
-            }elseif(CentralinoInteger::isInteger($result)) {
+            } elseif (CentralinoInteger::isInteger($result)) {
                 return new CentralinoInteger($result);
             }
         }
@@ -87,7 +87,7 @@ class CentralinoFloat
 
     public function sqrt()
     {
-        if($this->isPositive()) {
+        if ($this->isPositive()) {
             return new CentralinoFloat(sqrt($this->float));
         }
         return false;

@@ -3,13 +3,13 @@ namespace Centralino\Utility;
 
 class CentralinoString
 {
-    CONST CHAR_ENCODING = 'UTF-8';
+    const CHAR_ENCODING = 'UTF-8';
 
     private $string;
 
     private function __construct($string)
     {
-        if( ! static::isString($string)) {
+        if ( ! static::isString($string)) {
             throw new UtilityException("Invalid string given");
         }
 
@@ -46,7 +46,7 @@ class CentralinoString
     public function countOccurrences($needle)
     {
         $stringNeedle = new self($needle);
-        if(empty($stringNeedle->get())) {
+        if (empty($stringNeedle->get())) {
             throw new UtilityException("Invalid needle given");
         }
 
@@ -56,13 +56,13 @@ class CentralinoString
     public function firstOccurrence($needle, CentralinoInteger $offset = null)
     {
         $stringNeedle = new self($needle);
-        if(empty($stringNeedle->get())) {
+        if (empty($stringNeedle->get())) {
             throw new UtilityException("Invalid needle given");
         }
 
         $offset = ! is_null($offset) ? $offset->get() : null;
 
-        if( ! is_null($offset) && $offset > $this->getLength()) {
+        if (! is_null($offset) && $offset > $this->getLength()) {
             throw new UtilityException("Invalid offset given");
         }
 
@@ -72,13 +72,13 @@ class CentralinoString
     public function LastOccurrence($needle, CentralinoInteger $offset = null)
     {
         $stringNeedle = new self($needle);
-        if(empty($stringNeedle->get())) {
+        if (empty($stringNeedle->get())) {
             throw new UtilityException("Invalid needle given");
         }
 
         $offset = ! is_null($offset) ? $offset->get() : null;
 
-        if( ! is_null($offset) && $offset > $this->getLength()) {
+        if (! is_null($offset) && $offset > $this->getLength()) {
             throw new UtilityException("Invalid offset given");
         }
 
@@ -93,7 +93,7 @@ class CentralinoString
 
     public static function isString($string)
     {
-        if( ! is_string($string) ||
+        if (! is_string($string) ||
             ! mb_check_encoding($string, self::CHAR_ENCODING) ||
             ! mb_detect_encoding($string, self::CHAR_ENCODING, true)
         ) {

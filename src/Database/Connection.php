@@ -9,7 +9,7 @@ class Connection
 
         $class  = 'Centralino\Database\PDO\Driver\\'.mb_convert_case($driver, MB_CASE_TITLE, "UTF-8");
 
-        if( ! class_exists($class)) {
+        if (! class_exists($class)) {
             throw new DatabaseException("The given driver is either invalid or not implemented", 'critical');
         }
 

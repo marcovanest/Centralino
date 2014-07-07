@@ -53,10 +53,10 @@ class PDOStatement
         return $this->fetchMode;
     }
 
-    public function execute($aParams = array())
+    public function execute()
     {
         try {
-            return $this->pdoStatement->execute($aParams);
+            return $this->pdoStatement->execute($this->sqlStatementParams->get());
         }catch(\PDOException $exception) {
             throw new Database\DatabaseException('Statement failed to execute', Log\LogLevel::CRITICAL);
         }

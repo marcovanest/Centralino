@@ -5,7 +5,7 @@ use Centralino\Database\PDO\Driver;
 
 class PDOConnection
 {
-    CONST DEFAULT_ERROR_MODE = \PDO::ERRMODE_EXCEPTION;
+    const DEFAULT_ERROR_MODE = \PDO::ERRMODE_EXCEPTION;
 
     private $driver;
 
@@ -16,11 +16,11 @@ class PDOConnection
 
     public function create()
     {
-        try{
+        try {
             $pdo = new \PDO($this->driver->getDsn(), $this->driver->getDBUser(), $this->driver->getDBPass(), $this->driver->getDBOptions());
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, self::DEFAULT_ERROR_MODE);
             $pdo->query("SET NAMES 'utf8'");
-        }catch(\PDOException $exception) {
+        } catch (\PDOException $exception) {
             throw new \Centralino\Database\DatabaseException("Db connection failed", 'critical');
         }
 
