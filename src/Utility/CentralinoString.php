@@ -83,7 +83,7 @@ class CentralinoString extends UtilityAbstract implements UtilityInterface
         return $this;
     }
 
-    private static function isEmptyString($string)
+    public static function isEmptyString($string)
     {
         return $string === "";
     }

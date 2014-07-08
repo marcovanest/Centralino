@@ -56,7 +56,8 @@ class PDOStatement
     public function execute()
     {
         try {
-            return $this->pdoStatement->execute($this->sqlStatementParams->get());
+            $this->pdoStatement->execute($this->sqlStatementParams->get());
+            return $this;
         } catch (\PDOException $exception) {
             throw new Database\DatabaseException('Statement failed to execute', Log\LogLevel::CRITICAL);
         }

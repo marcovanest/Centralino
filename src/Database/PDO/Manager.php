@@ -30,64 +30,72 @@ class Manager
     {
         $result = $this->isValidStatement($statement, $params);
 
-        if ($result->isTrue()) {
+        if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid update statement', Log\LogLevel::CRITICAL);
         }
 
         $statement = $this->prep($statement, $params);
+        return $statement->execute();
     }
 
     public function delete($statement, $params = array())
     {
         $result = $this->isValidStatement($statement, $params);
 
-        if ($result->isTrue()) {
+        if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid delete statement', Log\LogLevel::CRITICAL);
         }
 
         $statement = $this->prep($statement, $params);
+        return $statement->execute();
     }
 
     public function transactionStart()
     {
-        if ($this->inTransaction()) {
-            throw new \Exception("already in transaction", 1);
+        if ($this->inTransaction()->isTrue()) {
+            throw new Database\DatabaseException('Already in transaction', Log\LogLevel::CRITICAL);
         }
 
-        $result = Utility\CentralinoBoolean::create($this->pdoInstance->beginTransaction());
+        $result = new Utility\CentralinoBoolean($this->pdoInstance->beginTransaction());
 
         if ($result->isFalse()) {
-            throw new \Exception("transaction start failed", 1);
+            throw new Database\DatabaseException('Transaction failed to start', Log\LogLevel::CRITICAL);
         }
+
+        return true;
     }
 
     public function transactionCommit()
     {
-        $result = Utility\CentralinoBoolean::create($this->pdoInstance->commit());
+        $result = new Utility\CentralinoBoolean($this->pdoInstance->commit());
 
         if ($result->isFalse()) {
-            throw new \Exception("transaction commit failed", 1);
+            throw new Database\DatabaseException('Transaction failed to commit', Log\LogLevel::CRITICAL);
         }
+
+        return true;
     }
 
     public function transactionRollback()
     {
-        $result = Utility\CentralinoBoolean::create($this->pdoInstance->rollback());
+        $result = new Utility\CentralinoBoolean($this->pdoInstance->rollback());
 
         if ($result->isFalse()) {
-            throw new \Exception("transaction rollback failed", 1);
+            throw new Database\DatabaseException('Transaction failed to rollback', Log\LogLevel::CRITICAL);
         }
+
+        return true;
     }
 
     public function inTransaction()
     {
-        return Utility\CentralinoBoolean::create($this->pdoInstance->inTransaction());
+        return new Utility\CentralinoBoolean($this->pdoInstance->inTransaction());
     }
 
     private function prep($statement, $params = array())
     {
-        $sqlStatement   = Utility\CentralinoString::create($statement);
-        $params         = Utility\CentralinoArray::create($params);
+        $sqlStatement   = new Utility\CentralinoString($statement);
+        $params         = new Utility\CentralinoArray($params);
 
         $pdoStatement = $this->pdoInstance->prepare($sqlStatement->get());
         return new PDOStatement($pdoStatement, $params);
@@ -95,12 +103,27 @@ class Manager
 
     private function isValidStatement($statement, $params)
     {
-        $sqlStatement   = Utility\CentralinoString::create($statement);
-        $params         = Utility\CentralinoArray::create($params);
+        if ($this->isValidQueryStatement($statement) === false) {
+            throw new Database\DatabaseException('Invalid query statement string', Log\LogLevel::CRITICAL);
+        }
 
-        $sqlStatementParamHolderCount   = substr_count($sqlStatement->get(), '?');
+        if ($this->isValidQueryParameters($params) === false) {
+            throw new Database\DatabaseException('Invalid query parameters', Log\LogLevel::CRITICAL);
+        }
+
+        $sqlStatementParamHolderCount   = substr_count($statement, '?');
         $paramCount                     = count($params);
 
-        return Utility\CentralinoBoolean::create($sqlStatementParamHolderCount === $paramCount);
+        return new Utility\CentralinoBoolean($sqlStatementParamHolderCount === $paramCount);
+    }
+
+    private function isValidQueryStatement($statement)
+    {
+        return Utility\CentralinoString::isString($statement) && Utility\CentralinoString::isEmptyString($statement) === false;
+    }
+
+    private function isValidQueryParameters($params)
+    {
+        return Utility\CentralinoArray::isArray($params);
     }
 }
