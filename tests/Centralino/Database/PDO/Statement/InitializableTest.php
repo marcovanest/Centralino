@@ -8,6 +8,10 @@ class InitializableTest extends \PHPUnit_Framework_TestCase
         $pdoStatementMock = $this->getMockBuilder('\PDOStatement')
                                     ->getMock();
 
+        $pdoStatementMock->expects($this->any())
+                ->method('execute')
+                ->will($this->returnValue(true));
+
         $stm = new \Centralino\Database\PDO\PDOStatement($pdoStatementMock);
 
         $this->assertInstanceOf('\Centralino\Database\PDO\PDOStatement', $stm);
@@ -57,8 +61,12 @@ class InitializableTest extends \PHPUnit_Framework_TestCase
     private function getDbStub($result)
     {
         $STMTstub = $this->getMockBuilder('\PDOStatement')
-                        ->setMethods(array('fetch', 'rowCount'))
+                        ->setMethods(array('execute', 'fetch', 'rowCount'))
                         ->getMock();
+
+        $STMTstub->expects($this->any())
+                ->method('execute')
+                ->will($this->returnValue(true));
 
         $STMTstub->expects($this->any())
                 ->method('fetch')
@@ -69,12 +77,8 @@ class InitializableTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(1));
 
         $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
-                            ->setMethods(array('execute', 'prepare'))
+                            ->setMethods(array('prepare'))
                             ->getMock();
-
-        $PDOstub->expects($this->any())
-                ->method('execute')
-                ->will($this->returnValue(true));
 
         $PDOstub->expects($this->any())
                 ->method('prepare')

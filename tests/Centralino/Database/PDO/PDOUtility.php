@@ -5,27 +5,19 @@ use Tests;
 
 class PDOUtility extends Tests\AbstractTestCase
 {
-    public function getPDOStub($result = array())
+    public function getPdoMock()
     {
-        $STMTstub = $this->getMockBuilder('PDOStatement')
+        $stmtMock = $this->getMockBuilder('\PDOStatement')
                     ->getMock();
 
-        $STMTstub->expects($this->any())
-                    ->method('fetchAll')
-                    ->will($this->returnValue($result));
-
-        $PDOstub = $this->getMockBuilder('Centralino\Database\PDO\_files\PDOMock')
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                    ->setMethods(array('prepare'))
                     ->getMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                     ->method('prepare')
-                    ->will($this->returnValue($STMTstub));
+                    ->will($this->returnValue($stmtMock));
 
-        $PDOstub->expects($this->any())
-                    ->method('getAttribute')
-                    ->with(\PDO::ATTR_ERRMODE)
-                    ->will($this->returnValue(\PDO::ERRMODE_EXCEPTION));
-
-        return $PDOstub;
+        return $pdoMock;
     }
 }

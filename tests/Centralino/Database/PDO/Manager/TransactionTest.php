@@ -32,7 +32,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testStart_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getDbStub();
+        $PDOstub = $this->getPdoMock();
 
         $PDOstub->expects($this->any())
                 ->method('inTransaction')
@@ -40,7 +40,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $PDOstub->expects($this->any())
                 ->method('beginTransaction')
-        ->will($this->returnValue(false));
+                ->will($this->returnValue(false));
 
         $manager = new \Centralino\Database\PDO\Manager($PDOstub);
         $manager->transactionStart();
@@ -51,7 +51,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommit_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getDbStub();
+        $PDOstub = $this->getPdoMock();
 
         $PDOstub->expects($this->any())
                 ->method('inTransaction')
@@ -59,7 +59,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $PDOstub->expects($this->any())
                 ->method('commit')
-        ->will($this->returnValue(false));
+                ->will($this->returnValue(false));
 
         $manager = new \Centralino\Database\PDO\Manager($PDOstub);
         $manager->transactionCommit();
@@ -70,7 +70,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollback_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getDbStub();
+        $PDOstub = $this->getPdoMock();
 
         $PDOstub->expects($this->any())
                 ->method('inTransaction')
@@ -78,7 +78,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $PDOstub->expects($this->any())
                 ->method('rollback')
-        ->will($this->returnValue(false));
+                ->will($this->returnValue(false));
 
         $manager = new \Centralino\Database\PDO\Manager($PDOstub);
         $manager->transactionRollback();
@@ -125,12 +125,12 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->connection->transactionStart();
     }
 
-    private function getDbStub()
+    private function getPdoMock()
     {
-        $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
-                            ->setMethods(array('beginTransaction', 'commit', 'rollback', 'inTransaction'))
-                            ->getMock();
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                        ->setMethods(array('beginTransaction', 'commit', 'rollback', 'inTransaction'))
+                        ->getMock();
 
-        return $PDOstub;
+        return $pdoMock;
     }
 }

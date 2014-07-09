@@ -9,38 +9,47 @@ class ExecuteTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute_Fails_Throws()
     {
-        $manager = $this->getDbStub(array(1));
+        $stmtMock = $this->getMockBuilder('\PDOStatement')
+                    ->getMock();
+
+        $stmtMock->expects($this->any())
+                    ->method('execute')
+                    ->will($this->throwException(new \PDOException));
+
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                    ->setMethods(array('prepare'))
+                    ->getMock();
+
+        $pdoMock->expects($this->any())
+                    ->method('prepare')
+                    ->will($this->returnValue($stmtMock));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
 
         $stm = $manager->select('SELECT * FROM LOG');
         $stm->execute();
     }
 
-    private function getDbStub($result)
+    public function testExecute_Succes_Returns_Centralino_PDOStatement()
     {
-        $STMTstub = $this->getMockBuilder('\PDOStatement')
-                        ->setMethods(array('execute', 'fetch'))
-                        ->getMock();
+        $stmtMock = $this->getMockBuilder('\PDOStatement')
+                    ->getMock();
 
-        $STMTstub->expects($this->any())
-                ->method('execute')
-                ->will($this->returnCallback(function () {
-                  throw new \PDOException();
-                }));
+        $stmtMock->expects($this->any())
+                    ->method('execute')
+                    ->will($this->returnValue(true));
 
-        $STMTstub->expects($this->any())
-                ->method('fetch')
-                ->will($this->returnValue($result));
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                    ->setMethods(array('prepare'))
+                    ->getMock();
 
-        $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
-                            ->setMethods(array('prepare'))
-                            ->getMock();
+        $pdoMock->expects($this->any())
+                    ->method('prepare')
+                    ->will($this->returnValue($stmtMock));
 
-        $PDOstub->expects($this->any())
-                ->method('prepare')
-                ->will($this->returnValue($STMTstub));
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
-
-        return $manager;
+        $stm = $manager->select('SELECT * FROM LOG');
+        $this->assertInstanceOf('\Centralino\Database\PDO\PDOStatement', $stm->execute());
     }
 }

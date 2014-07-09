@@ -2,6 +2,7 @@
 namespace Centralino\Database\PDO;
 
 use Centralino\Database;
+use Centralino\Utility;
 use Psr\Log;
 
 class PDOStatement
@@ -56,7 +57,11 @@ class PDOStatement
     public function execute()
     {
         try {
-            $this->pdoStatement->execute($this->sqlStatementParams->get());
+            $result = new Utility\CentralinoBoolean($this->pdoStatement->execute($this->sqlStatementParams->get()));
+
+            if ($result->isFalse()) {
+                throw new Database\DatabaseException('Statement failed to execute', Log\LogLevel::CRITICAL);
+            }
             return $this;
         } catch (\PDOException $exception) {
             throw new Database\DatabaseException('Statement failed to execute', Log\LogLevel::CRITICAL);

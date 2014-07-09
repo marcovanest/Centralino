@@ -38,20 +38,20 @@ class SetFetchModeTest extends \PHPUnit_Framework_TestCase
     private function getDbStub($result)
     {
         $STMTstub = $this->getMockBuilder('\PDOStatement')
-                        ->setMethods(array('fetch'))
+                        ->setMethods(array('execute', 'fetch'))
                         ->getMock();
+
+        $STMTstub->expects($this->any())
+                ->method('execute')
+                ->will($this->returnValue(true));
 
         $STMTstub->expects($this->any())
                 ->method('fetch')
                 ->will($this->returnValue($result));
 
         $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
-                            ->setMethods(array('execute', 'prepare'))
+                            ->setMethods(array('prepare'))
                             ->getMock();
-
-        $PDOstub->expects($this->any())
-                ->method('execute')
-                ->will($this->returnValue(true));
 
         $PDOstub->expects($this->any())
                 ->method('prepare')
