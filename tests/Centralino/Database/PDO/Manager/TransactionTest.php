@@ -27,6 +27,63 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->connection->inTransaction()->isTrue());
     }
 
+    /**
+     * @expectedException Centralino\Database\DatabaseException
+     */
+    public function testStart_Transaction_Failed_Throws()
+    {
+        $PDOstub = $this->getDbStub();
+
+        $PDOstub->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $PDOstub->expects($this->any())
+                ->method('beginTransaction')
+        ->will($this->returnValue(false));
+
+        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager->transactionStart();
+    }
+
+    /**
+     * @expectedException Centralino\Database\DatabaseException
+     */
+    public function testCommit_Transaction_Failed_Throws()
+    {
+        $PDOstub = $this->getDbStub();
+
+        $PDOstub->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $PDOstub->expects($this->any())
+                ->method('commit')
+        ->will($this->returnValue(false));
+
+        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager->transactionCommit();
+    }
+
+    /**
+     * @expectedException Centralino\Database\DatabaseException
+     */
+    public function testRollback_Transaction_Failed_Throws()
+    {
+        $PDOstub = $this->getDbStub();
+
+        $PDOstub->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $PDOstub->expects($this->any())
+                ->method('rollback')
+        ->will($this->returnValue(false));
+
+        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager->transactionRollback();
+    }
+
     public function testCommit_Transaction()
     {
         $this->connection->transactionStart();
@@ -66,5 +123,14 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->connection->transactionStart();
 
         $this->connection->transactionStart();
+    }
+
+    private function getDbStub()
+    {
+        $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                            ->setMethods(array('beginTransaction', 'commit', 'rollback', 'inTransaction'))
+                            ->getMock();
+
+        return $PDOstub;
     }
 }

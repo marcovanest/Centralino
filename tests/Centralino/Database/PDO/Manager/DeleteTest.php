@@ -12,7 +12,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     public function testDelete_With_Wrong_Param_Count_Throws($statement, $params)
     {
         $manager = new PDO\Manager($this->getPdoMock());
-        $manager->update($statement, $params);
+        $manager->delete($statement, $params);
     }
 
    /**
