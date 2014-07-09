@@ -69,20 +69,22 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     private function getPdoMock()
     {
-        $stmtStub = $this->getMockBuilder('\PDOStatement')
-                    ->getMock();
+        $stmMock = $this->getMockBuilder('\PDOStatement')
+                        ->setMethods(array('execute'))
+                        ->getMock();
 
-        $stmtStub->expects($this->any())
-            ->method('execute')
-            ->will($this->returnValue(true));
+        $stmMock->expects($this->any())
+                ->method('execute')
+                ->will($this->returnValue(true));
 
-        $pdoStub = $this->getMockBuilder('Centralino\Database\PDO\_files\PDOMock')
-                    ->getMock();
+        $pdoMock = $this->getMockBuilder('Centralino\Database\PDO\_files\PDOMock')
+                        ->setMethods(array('prepare'))
+                        ->getMock();
 
-        $pdoStub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('prepare')
-                ->will($this->returnValue($stmtStub));
+                ->will($this->returnValue($stmMock));
 
-        return $pdoStub;
+        return $pdoMock;
     }
 }

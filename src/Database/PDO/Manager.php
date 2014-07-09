@@ -70,6 +70,7 @@ class Manager
         $result = new Utility\CentralinoBoolean($this->pdoInstance->commit());
 
         if ($result->isFalse()) {
+            $this->transactionRollback();
             throw new Database\DatabaseException('Transaction failed to commit', Log\LogLevel::CRITICAL);
         }
 

@@ -3,28 +3,20 @@ namespace CentralinoManager;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase
 {
-    private $connection;
-
-    public function setUp()
-    {
-        $connectionParams = array(
-                'host'=>'localhost',
-                'port'=>null,
-                'dbname'=>'benny_test',
-                'dbuser'=>'postgres',
-                'dbpass'=>'tar',
-                'options'=>array()
-            );
-
-        $this->connection = \Centralino\Database\Connection::createPDOConnection('pgsql', $connectionParams);
-    }
-
     public function testStart_Transaction()
     {
-        $result = $this->connection->transactionStart();
+        $pdoMock = $this->getPdoMock();
 
-        $this->assertTrue($result);
-        $this->assertTrue($this->connection->inTransaction()->isTrue());
+        $pdoMock->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $pdoMock->expects($this->any())
+                ->method('beginTransaction')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
+        $this->assertTrue($manager->transactionStart());
     }
 
     /**
@@ -32,17 +24,17 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testStart_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getPdoMock();
+        $pdoMock = $this->getPdoMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('inTransaction')
                 ->will($this->returnValue(false));
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('beginTransaction')
                 ->will($this->returnValue(false));
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
         $manager->transactionStart();
     }
 
@@ -51,17 +43,21 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommit_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getPdoMock();
+        $pdoMock = $this->getPdoMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('inTransaction')
                 ->will($this->returnValue(false));
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('commit')
                 ->will($this->returnValue(false));
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $pdoMock->expects($this->any())
+                ->method('rollback')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
         $manager->transactionCommit();
     }
 
@@ -70,49 +66,84 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollback_Transaction_Failed_Throws()
     {
-        $PDOstub = $this->getPdoMock();
+        $pdoMock = $this->getPdoMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('inTransaction')
                 ->will($this->returnValue(false));
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('rollback')
                 ->will($this->returnValue(false));
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
         $manager->transactionRollback();
     }
 
     public function testCommit_Transaction()
     {
-        $this->connection->transactionStart();
-        $result = $this->connection->transactionCommit();
+        $pdoMock = $this->getPdoMock();
 
-        $this->assertTrue($result);
-        $this->assertTrue($this->connection->inTransaction()->isFalse());
+        $pdoMock->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $pdoMock->expects($this->any())
+                ->method('beginTransaction')
+                ->will($this->returnValue(true));
+
+        $pdoMock->expects($this->any())
+                ->method('commit')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
+        $manager->transactionStart();
+        $this->assertTrue($manager->transactionCommit());
     }
 
     public function testRollback_Transaction()
     {
-        $this->connection->transactionStart();
-        $result = $this->connection->transactionRollback();
+        $pdoMock = $this->getPdoMock();
 
-        $this->assertTrue($result);
-        $this->assertTrue($this->connection->inTransaction()->isFalse());
+        $pdoMock->expects($this->any())
+                ->method('inTransaction')
+                ->will($this->returnValue(false));
+
+        $pdoMock->expects($this->any())
+                ->method('beginTransaction')
+                ->will($this->returnValue(true));
+
+        $pdoMock->expects($this->any())
+                ->method('rollback')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
+        $manager->transactionStart();
+        $this->assertTrue($manager->transactionRollback());
     }
 
     public function testIn_Transaction()
     {
-        $this->connection->transactionStart();
+        $pdoMock = $this->getPdoMock();
 
-        $result = $this->connection->inTransaction();
-        $this->assertTrue($result->isTrue());
+        $pdoMock->expects($this->exactly(3))
+                ->method('inTransaction')
+                ->will($this->onConsecutiveCalls(false, true, false));
 
-        $this->connection->transactionCommit();
+        $pdoMock->expects($this->any())
+                ->method('beginTransaction')
+                ->will($this->returnValue(true));
 
-        $result = $this->connection->inTransaction();
-        $this->assertTrue($result->isFalse());
+        $pdoMock->expects($this->any())
+                ->method('commit')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
+        $manager->transactionStart();
+        $this->assertTrue($manager->inTransaction()->isTrue());
+
+        $manager->transactionCommit();
+        $this->assertTrue($manager->inTransaction()->isFalse());
     }
 
     /**
@@ -120,9 +151,19 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testNested_Transaction_Not_Allowed_Throws()
     {
-        $this->connection->transactionStart();
+        $pdoMock = $this->getPdoMock();
 
-        $this->connection->transactionStart();
+        $pdoMock->expects($this->exactly(2))
+                ->method('inTransaction')
+                ->will($this->onConsecutiveCalls(false, true));
+
+        $pdoMock->expects($this->any())
+                ->method('beginTransaction')
+                ->will($this->returnValue(true));
+
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
+        $manager->transactionStart();
+        $manager->transactionStart();
     }
 
     private function getPdoMock()
