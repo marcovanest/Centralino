@@ -39,7 +39,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     public function testRollback_Transaction()
     {
         $this->connection->transactionStart();
-        $result = $this->connection->transactionCommit();
+        $result = $this->connection->transactionRollback();
 
         $this->assertTrue($result);
         $this->assertTrue($this->connection->inTransaction()->isFalse());

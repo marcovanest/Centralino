@@ -19,7 +19,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
    /**
     * @dataProvider excecuteWithValidParameterProvider
     */
-    public function testSelect_With_Valid_Param_Count($statement, $params)
+    public function testSelect_With_Valid_Param_Count_Returns_Centralino_PDOStatement($statement, $params)
     {
         $manager = new PDO\Manager($this->getPdoMock());
 
@@ -27,6 +27,27 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Centralino\Database\PDO\PDOStatement', $result);
     }
+
+    /**
+     * @expectedException Centralino\Database\DatabaseException
+     */
+    public function testSelect_With_Empty_StatementString_Throws()
+    {
+        $manager = new PDO\Manager($this->getPdoMock());
+
+        $manager->select("");
+    }
+
+    /**
+     * @expectedException Centralino\Database\DatabaseException
+     */
+    public function testSelect_With_Invalid_Statement_Params_Throws()
+    {
+        $manager = new PDO\Manager($this->getPdoMock());
+
+        $manager->select("SELECT * FROM LOG", "1");
+    }
+
 
     public function excecuteWithWrongParameterProvider()
     {
