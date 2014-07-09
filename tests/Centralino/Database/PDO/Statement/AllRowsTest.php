@@ -1,43 +1,21 @@
 <?php
 namespace Statement;
 
-class NextRowTest extends \PHPUnit_Framework_TestCase
+class AllRowsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNextRow()
+    public function testAllRows()
     {
         $manager = $this->getPdoMock(array(1));
 
         $stm = $manager->select('SELECT * FROM LOG');
 
-        $this->assertEquals(array(1), $stm->nextRow());
+        $this->assertEquals(array(1), $stm->allRows());
     }
-
-    /**
-     * @expectedException Centralino\Database\DatabaseException
-     */
-    public function testNextRow_With_Invalid_Cursor_Orientation_Throws()
-    {
-        $manager = $this->getPdoMock(array(1));
-
-        $stm = $manager->select('SELECT * FROM LOG');
-
-        $stm->nextRow('invalid');
-    }
-
-    /**
-     * @expectedException Centralino\Database\DatabaseException
-     */
-    public function testNextRow_With_Invalid_Cursor_Throws()
-    {
-        $manager = $this->getPdoMock(array(1));
-
-        $stm = $manager->select('SELECT * FROM LOG', array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
-    }
-
+    
     private function getPdoMock($result)
     {
         $stmMock = $this->getMockBuilder('\PDOStatement')
-                        ->setMethods(array('execute', 'fetch'))
+                        ->setMethods(array('execute', 'fetchAll'))
                         ->getMock();
 
         $stmMock->expects($this->any())
@@ -45,7 +23,7 @@ class NextRowTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(true));
 
         $stmMock->expects($this->any())
-                ->method('fetch')
+                ->method('fetchAll')
                 ->will($this->returnValue($result));
 
         $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')

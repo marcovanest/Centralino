@@ -34,6 +34,11 @@ class CentralinoArray extends UtilityAbstract implements
         return array_keys($this->array);
     }
 
+    public function in($needle)
+    {
+        return in_array($needle, $this->array, true);
+    }
+
     public function seek($position)
     {
         $this->position = $position;
