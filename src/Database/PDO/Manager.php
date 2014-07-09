@@ -7,6 +7,8 @@ use Psr\Log;
 
 class Manager
 {
+    const CURSOR = \PDO::CURSOR_FWDONLY;
+
     private $pdoInstance;
 
     public function __construct(\PDO $pdo)
@@ -14,39 +16,39 @@ class Manager
         $this->pdoInstance = $pdo;
     }
 
-    public function select($statement, $params = array())
+    public function select($statement, $inputParams = array())
     {
-        $result = $this->isValidStatement($statement, $params);
+        $result = $this->isValidStatement($statement, $inputParams);
 
         if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid select statement', Log\LogLevel::CRITICAL);
         }
 
-        $statement = $this->prep($statement, $params);
+        $statement = $this->prep($statement, $inputParams);
         return $statement->execute();
     }
 
-    public function update($statement, $params = array())
+    public function update($statement, $inputParams = array())
     {
-        $result = $this->isValidStatement($statement, $params);
+        $result = $this->isValidStatement($statement, $inputParams);
 
         if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid update statement', Log\LogLevel::CRITICAL);
         }
 
-        $statement = $this->prep($statement, $params);
+        $statement = $this->prep($statement, $inputParams);
         return $statement->execute();
     }
 
-    public function delete($statement, $params = array())
+    public function delete($statement, $inputParams = array())
     {
-        $result = $this->isValidStatement($statement, $params);
+        $result = $this->isValidStatement($statement, $inputParams);
 
         if ($result->isFalse()) {
             throw new Database\DatabaseException('Invalid delete statement', Log\LogLevel::CRITICAL);
         }
 
-        $statement = $this->prep($statement, $params);
+        $statement = $this->prep($statement, $inputParams);
         return $statement->execute();
     }
 
@@ -93,29 +95,29 @@ class Manager
         return new Utility\CentralinoBoolean($this->pdoInstance->inTransaction());
     }
 
-    private function prep($statement, $params = array())
+    private function prep($statement, $inputParams = array())
     {
-        $sqlStatement   = new Utility\CentralinoString($statement);
-        $params         = new Utility\CentralinoArray($params);
+        $sqlStatement = new Utility\CentralinoString($statement);
+        $inputParams = new Utility\CentralinoArray($inputParams);
 
-        $pdoStatement = $this->pdoInstance->prepare($sqlStatement->get());
-        return new PDOStatement($pdoStatement, $params);
+        $pdoStatement = $this->pdoInstance->prepare($sqlStatement->get(), array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
+        return new PDOStatement($pdoStatement, $inputParams);
     }
 
-    private function isValidStatement($statement, $params)
+    private function isValidStatement($statement, $inputParams)
     {
         if ($this->isValidQueryStatement($statement) === false) {
             throw new Database\DatabaseException('Invalid query statement string', Log\LogLevel::CRITICAL);
         }
 
-        if ($this->isValidQueryParameters($params) === false) {
+        if ($this->isValidQueryInputParameters($inputParams) === false) {
             throw new Database\DatabaseException('Invalid query parameters', Log\LogLevel::CRITICAL);
         }
 
-        $sqlStatementParamHolderCount   = substr_count($statement, '?');
-        $paramCount                     = count($params);
+        $sqlStatementParamHolderCount = substr_count($statement, '?');
+        $inputParamCount = count($inputParams);
 
-        return new Utility\CentralinoBoolean($sqlStatementParamHolderCount === $paramCount);
+        return new Utility\CentralinoBoolean($sqlStatementParamHolderCount === $inputParamCount);
     }
 
     private function isValidQueryStatement($statement)
@@ -123,8 +125,8 @@ class Manager
         return Utility\CentralinoString::isString($statement) && Utility\CentralinoString::isEmptyString($statement) === false;
     }
 
-    private function isValidQueryParameters($params)
+    private function isValidQueryInputParameters($inputParams)
     {
-        return Utility\CentralinoArray::isArray($params);
+        return Utility\CentralinoArray::isArray($inputParams);
     }
 }

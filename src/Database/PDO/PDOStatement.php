@@ -75,11 +75,27 @@ class PDOStatement
 
     public function nextRow($cursorOrientation = \PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
     {
+        if (! in_array($cursorOrientation, $this->cursorOrientations())) {
+            throw new Database\DatabaseException('Invalid cursor orientation', Log\LogLevel::CRITICAL);
+        }
+                
         return $this->pdoStatement->fetch($this->fetchMode, $cursorOrientation, $cursorOffset);
     }
 
     public function allRows()
     {
         return $this->pdoStatement->fetchAll();
+    }
+
+    private function cursorOrientations()
+    {
+        return array(
+            \PDO::FETCH_ORI_NEXT,
+            \PDO::FETCH_ORI_PRIOR,
+            \PDO::FETCH_ORI_FIRST,
+            \PDO::FETCH_ORI_LAST,
+            \PDO::FETCH_ORI_ABS,
+            \PDO::FETCH_ORI_REL,
+        );
     }
 }
