@@ -5,7 +5,7 @@ class SetFetchModeTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetFetchMode()
     {
-        $manager = $this->getDbStub(array(1));
+        $manager = $this->getPdoMock(array(1));
 
         $stm = $manager->select('SELECT * FROM LOG');
 
@@ -19,7 +19,7 @@ class SetFetchModeTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFetchMode_Wrong_Mode_Throws()
     {
-        $manager = $this->getDbStub(array(1));
+        $manager = $this->getPdoMock(array(1));
 
         $stm = $manager->select('SELECT * FROM LOG');
 
@@ -28,36 +28,36 @@ class SetFetchModeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetFetchMode_With_Mode_And_Params()
     {
-        $manager = $this->getDbStub(array(1));
+        $manager = $this->getPdoMock(array(1));
 
         $stm = $manager->select('SELECT * FROM LOG');
 
         $stm->setFetchMode(\PDO::FETCH_OBJ, array(121));
     }
 
-    private function getDbStub($result)
+    private function getPdoMock($result)
     {
-        $STMTstub = $this->getMockBuilder('\PDOStatement')
+        $stmtMock = $this->getMockBuilder('\PDOStatement')
                         ->setMethods(array('execute', 'fetch'))
                         ->getMock();
 
-        $STMTstub->expects($this->any())
+        $stmtMock->expects($this->any())
                 ->method('execute')
                 ->will($this->returnValue(true));
 
-        $STMTstub->expects($this->any())
+        $stmtMock->expects($this->any())
                 ->method('fetch')
                 ->will($this->returnValue($result));
 
-        $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
                             ->setMethods(array('prepare'))
                             ->getMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('prepare')
-                ->will($this->returnValue($STMTstub));
+                ->will($this->returnValue($stmtMock));
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
 
         return $manager;
     }

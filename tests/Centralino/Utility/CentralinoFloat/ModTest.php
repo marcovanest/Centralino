@@ -26,4 +26,13 @@ class ModTest extends \PHPUnit_Framework_TestCase
         $float = new Utility\CentralinoFloat(123.12);
         $this->assertFalse($float->mod("3213"));
     }
+
+    /**
+     * @expectedException Centralino\Utility\UtilityException
+     */
+    public function testMod_By_Zero_Throws()
+    {
+        $float = new Utility\CentralinoFloat(123.12);
+        $float->mod(0);
+    }
 }

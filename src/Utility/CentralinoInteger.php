@@ -39,6 +39,10 @@ class CentralinoInteger extends UtilityAbstract implements UtilityInterface
 
     public function div($divide)
     {
+        if ((int)$divide === 0) {
+            $this->throwException('Division by zero');
+        }
+
         if ($this->isValidModifier($divide)) {
             $this->int = ($this->int / $divide);
             return true;
@@ -57,6 +61,10 @@ class CentralinoInteger extends UtilityAbstract implements UtilityInterface
 
     public function mod($modulo)
     {
+        if ($modulo === 0) {
+            $this->throwException('Division by zero');
+        }
+
         if ($this->isValidModifier($modulo)) {
             return ($this->int % $modulo);
         }

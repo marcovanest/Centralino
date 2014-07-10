@@ -51,40 +51,40 @@ class InitializableTest extends \PHPUnit_Framework_TestCase
 
     public function testGet_Number_Of_Affected_Rows()
     {
-        $manager = $this->getDbStub(array(1));
+        $manager = $this->getPdoMock(array(1));
 
         $stm = $manager->select('SELECT * FROM LOG');
 
         $this->assertEquals(1, $stm->getNumberOfAffectedRows());
     }
 
-    private function getDbStub($result)
+    private function getPdoMock($result)
     {
-        $STMTstub = $this->getMockBuilder('\PDOStatement')
+        $stmtMock = $this->getMockBuilder('\PDOStatement')
                         ->setMethods(array('execute', 'fetch', 'rowCount'))
                         ->getMock();
 
-        $STMTstub->expects($this->any())
+        $stmtMock->expects($this->any())
                 ->method('execute')
                 ->will($this->returnValue(true));
 
-        $STMTstub->expects($this->any())
+        $stmtMock->expects($this->any())
                 ->method('fetch')
                 ->will($this->returnValue($result));
 
-        $STMTstub->expects($this->any())
+        $stmtMock->expects($this->any())
                 ->method('rowCount')
                 ->will($this->returnValue(1));
 
-        $PDOstub = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
-                            ->setMethods(array('prepare'))
-                            ->getMock();
+        $pdoMock = $this->getMockBuilder('\Centralino\Database\PDO\_files\PDOMock')
+                        ->setMethods(array('prepare'))
+                        ->getMock();
 
-        $PDOstub->expects($this->any())
+        $pdoMock->expects($this->any())
                 ->method('prepare')
-                ->will($this->returnValue($STMTstub));
+                ->will($this->returnValue($stmtMock));
 
-        $manager = new \Centralino\Database\PDO\Manager($PDOstub);
+        $manager = new \Centralino\Database\PDO\Manager($pdoMock);
 
         return $manager;
     }

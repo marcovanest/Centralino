@@ -39,4 +39,22 @@ class DivTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($integer->div('231'));
         $this->assertEquals(123, $integer->get());
     }
+
+    /**
+     * @expectedException Centralino\Utility\UtilityException
+     */
+    public function testDiv_By_Integer_Zero_Throws()
+    {
+        $integer = new Utility\CentralinoInteger(123);
+        $integer->div(0);
+    }
+
+    /**
+     * @expectedException Centralino\Utility\UtilityException
+     */
+    public function testDiv_By_Float_Zero_Throws()
+    {
+        $integer = new Utility\CentralinoInteger(123);
+        $result = $integer->div(0.00);
+    }
 }

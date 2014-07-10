@@ -41,6 +41,10 @@ class CentralinoFloat extends UtilityAbstract implements UtilityInterface
 
     public function div($div)
     {
+        if ((int) $div === 0) {
+            $this->throwException('Divide by zero');
+        }
+
         if ($this->isValidModifier($div)) {
             $this->float = $this->float / $div;
             return true;
@@ -59,6 +63,10 @@ class CentralinoFloat extends UtilityAbstract implements UtilityInterface
 
     public function mod($modulo)
     {
+        if ($modulo === 0) {
+            $this->throwException('Divide by zero');
+        }
+
         if ($this->isValidModifier($modulo)) {
             return fmod($this->float, $modulo);
         }
@@ -103,8 +111,8 @@ class CentralinoFloat extends UtilityAbstract implements UtilityInterface
 
     private function isValidModifier($modifier)
     {
-        $valid = new CentralinoBoolean($this->isFloat($modifier) || CentralinoInteger::isInteger($modifier));
-        return $valid->get();
+        $valid = $this->isFloat($modifier) || CentralinoInteger::isInteger($modifier);
+        return $valid;
     }
 
     public static function isFloat($float)

@@ -26,4 +26,13 @@ class ModTest extends \PHPUnit_Framework_TestCase
         $integer = new Utility\CentralinoInteger(123);
         $this->assertFalse($integer->mod("3213"));
     }
+
+    /**
+     * @expectedException Centralino\Utility\UtilityException
+     */
+    public function testMod_By_Zero_Throws()
+    {
+        $integer = new Utility\CentralinoInteger(123);
+        $integer->mod(0);
+    }
 }
