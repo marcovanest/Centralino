@@ -1,5 +1,7 @@
 <?php
-class PSR4Autoloader
+namespace Centralino\Core;
+
+class Autoloader
 {
     private $namespaces = array();
 
@@ -10,7 +12,7 @@ class PSR4Autoloader
 
     public function addNamespace($prefix, $dir)
     {
-        $prefix = trim($prefix, NS). NS;
+        $prefix = trim($prefix, '\\'). '\\';
 
         if ( ! isset($this->namespaces[$prefix]) ) {
             $this->namespaces[$prefix] = array();
@@ -40,7 +42,7 @@ class PSR4Autoloader
 
             // remove the trailing namespace separator for the next iteration
             // of strrpos()
-            $prefix = rtrim($prefix, NS);
+            $prefix = rtrim($prefix, '\\');
         }
 
         return false;
@@ -53,14 +55,14 @@ class PSR4Autoloader
         }
 
         foreach ($this->namespaces[$prefix] as $dir) {
-            $dir            = str_replace('\\', DS, $dir);
-            $relative_class = str_replace('\\', DS, $relative_class);
+            $dir            = str_replace('\\', '/', $dir);
+            $relative_class = str_replace('\\', '/', $relative_class);
 
-            $file = $dir.DS.$relative_class;
+            $file = $dir.'/'.$relative_class;
 
-            if( file_exists($file.EXT) )
+            if( file_exists($file.'.php') )
             {
-                require_once($file.EXT);
+                require_once($file.'.php');
             }
         }
     }

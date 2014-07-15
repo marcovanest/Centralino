@@ -7,4 +7,14 @@ class Centralino
     {
 
     }
+
+    public function getServiceRegistry()
+    {
+        return new Service\Registry();
+    }
+
+    public function initializeRouter()
+    {
+        return new Router\Router();
+    }
 }

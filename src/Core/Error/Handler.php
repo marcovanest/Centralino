@@ -12,7 +12,7 @@ class Handler
         $this->logger = $logger;
     }
 
-    public function handleException($errno, $errstr, $errfile, $errline, array $errcontext)
+    public function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
     {
 
     }
