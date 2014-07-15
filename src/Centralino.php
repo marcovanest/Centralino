@@ -13,8 +13,13 @@ class Centralino
         return new Service\Registry();
     }
 
-    public function initializeRouter()
+    public function getRouter($type)
     {
-        return new Router\Router();
+        switch ($type) {
+            case 'slim':
+                return new Router\SlimRouter();
+            break;
+        }
+
     }
 }
