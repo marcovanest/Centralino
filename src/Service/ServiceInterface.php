@@ -3,5 +3,5 @@ namespace Centralino\Service;
 
 interface ServiceInterface
 {
-    public function routes();
+    public function setUp();
 }

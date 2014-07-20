@@ -3,23 +3,20 @@ namespace Centralino\Router;
 
 abstract class RouterAbstract implements RouterInterface
 {
-    public function registerRoutesFromServices(\Centralino\Service\Registry $serviceRegistry)
+    public function registerRoutes(\Centralino\Router\Route\Registry $routeRegistry)
     {
-        $registeredServices = $serviceRegistry->getRegisteredServices();
+        $routes = $routeRegistry->getRegisteredRoutes();
 
-        foreach ($registeredServices as $serviceClassName) {
+        foreach ($routes as $route => $routeClass) {
 
-            if (! class_exists($serviceClassName)) {
-                throw new \Exception('Invalid service given');
+            if (! class_exists($routeClass)) {
+                throw new \Exception('Invalid route given');
             }
 
-            $service = new $serviceClassName();
-            $routes = $service->routes();
+            $routeClass = new $routeClass();
 
-            foreach ($routes as $routeImplementation) {
-                $this->registerRouteFromService($routeImplementation, function($routeParameters) use ($service, $routeImplementation) {
-                    $service->{$routeImplementation['method']}($routeParameters);
-                });
+            foreach ($routeClass->routes() as $route) {
+               $this->registerRoute($route);
             }
         }
     }

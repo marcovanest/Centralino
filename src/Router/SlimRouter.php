@@ -10,21 +10,35 @@ class SlimRouter extends RouterAbstract
         $this->slim = new \Slim\Slim();
     }
 
-    public function registerRouteFromService($implementation, $serviceCallback)
+    public function registerRoute($route)
     {
-        $route = $implementation['route'];
-        $httpMethods = $implementation['httpmethods'];
+        $routeName = $route['route'];
+        $service = $route['service'];
+        $serviceMethod = $route['method'];
+        $httpMethods = $route['httpmethods'];
 
-        if (! is_callable($serviceCallback)) {
-            throw new \Exception('Service method not callable');
+        if(! class_exists($service)) {
+            throw new \Exception('Service not found');
         }
 
-        $this->slim->map($route, function () use ($serviceCallback) {
+        $serviceClass = new $service;
+
+        if(! method_exists($serviceClass, $serviceMethod)) {
+            throw new \Exception('Service method not found');
+        }
+
+        $serviceMethodCallback = function ($params) use ($serviceClass, $serviceMethod) {
+            $serviceClass->$serviceMethod($params);
+        };
+
+        $this->slim->map($routeName, function () use ($serviceMethodCallback) {
             $routeParameters = $this->slim->router()->getCurrentRoute()->getParams();
-            $serviceCallback($routeParameters);
+            $serviceMethodCallback($routeParameters);
         })->via(array_walk($httpMethods, function ($value) {
             return $value;
         }));
+        
+        $serviceClass->setUp();
     }
 
     public function initialize()

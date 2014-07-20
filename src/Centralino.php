@@ -8,9 +8,9 @@ class Centralino
 
     }
 
-    public function getServiceRegistry()
+    public function getRouteRegistry()
     {
-        return new Service\Registry();
+        return new Router\Route\Registry();
     }
 
     public function getRouter($type)

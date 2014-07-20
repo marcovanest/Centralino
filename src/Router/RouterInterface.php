@@ -3,7 +3,7 @@ namespace Centralino\Router;
 
 interface RouterInterface
 {
-    public function registerRoutesFromServices(\Centralino\Service\Registry $serviceRegistry);
-    public function registerRouteFromService($service, $implementation);
+    public function registerRoutes(\Centralino\Router\Route\Registry $routeRegistry);
+    public function registerRoute($route);
     public function initialize();
 }
