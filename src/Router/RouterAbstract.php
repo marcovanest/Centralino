@@ -3,9 +3,14 @@ namespace Centralino\Router;
 
 abstract class RouterAbstract implements RouterInterface
 {
+
     public function registerRoutes(\Centralino\Router\Route\Registry $routeRegistry)
     {
         $routes = $routeRegistry->getRegisteredRoutes();
+
+        if (empty($routes)) {
+            throw new \Exception('No routes supplied by the registry');
+        }
 
         foreach ($routes as $route => $routeClassName) {
 
@@ -20,6 +25,8 @@ abstract class RouterAbstract implements RouterInterface
             }
         }
     }
+
+    abstract public function registerRoute($route);
 
     public function isClassDefined($routeClassName)
     {

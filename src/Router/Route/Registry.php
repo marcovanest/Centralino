@@ -24,6 +24,8 @@ class Registry
         if (isset($this->routes[$route])) {
             return $this->routes[$route];
         }
+
+        return false;
     }
 
     public function getRegisteredRoutes()
