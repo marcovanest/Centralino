@@ -9,6 +9,6 @@
     },
     "require": {
         "psr/log": "1.0.*",
-        "bshaffer/oauth2-server-php": "v1.4",
+        "bshaffer/oauth2-server-php": "v1.4"
     }
 }
