@@ -5,44 +5,56 @@ class SlimRouter extends RouterAbstract
 {
     private $slim;
 
-    public function __construct()
+    public function __construct(\Slim\Slim $slim)
     {
-        $this->slim = new \Slim\Slim();
+        $this->slim = $slim;
     }
 
     public function registerRoute($route)
     {
         $routeName = $route['route'];
-        $service = $route['service'];
+        $serviceClassName = $route['service'];
         $serviceMethod = $route['method'];
         $httpMethods = $route['httpmethods'];
 
-        if(! class_exists($service)) {
-            throw new \Exception('Service not found');
-        }
+        $service = $this->getServiceInstance($serviceClassName);
 
-        $serviceClass = new $service;
+        $method = $this->getServiceMethodCallBack(
+            $service,
+            $serviceMethod
+        );
 
-        if(! method_exists($serviceClass, $serviceMethod)) {
-            throw new \Exception('Service method not found');
-        }
-
-        $serviceMethodCallback = function ($params) use ($serviceClass, $serviceMethod) {
-            $serviceClass->$serviceMethod($params);
-        };
-
-        $this->slim->map($routeName, function () use ($serviceMethodCallback) {
-            $routeParameters = $this->slim->router()->getCurrentRoute()->getParams();
-            $serviceMethodCallback($routeParameters);
+        $this->slim->map($routeName, function () use ($method) {
+            $method($this->slim->router()->getCurrentRoute()->getParams());
         })->via(array_walk($httpMethods, function ($value) {
             return $value;
         }));
-        
-        $serviceClass->setUp();
+
+        $service->setUp();
     }
 
     public function initialize()
     {
         $this->slim->run();
+    }
+
+    private function getServiceInstance($serviceClassName)
+    {
+        if (! $this->isClassDefined($serviceClassName)) {
+            throw new \Exception('Service not found');
+        }
+
+        return new $serviceClassName();
+    }
+
+    private function getServiceMethodCallBack(\Centralino\Service\ServiceInterface $service, $serviceMethod)
+    {
+        if (! method_exists($service, $serviceMethod)) {
+            throw new \Exception('Service method not found');
+        }
+
+        return function ($params) use ($service, $serviceMethod) {
+            $service->$serviceMethod($params);
+        };
     }
 }

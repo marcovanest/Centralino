@@ -7,17 +7,27 @@ abstract class RouterAbstract implements RouterInterface
     {
         $routes = $routeRegistry->getRegisteredRoutes();
 
-        foreach ($routes as $route => $routeClass) {
+        foreach ($routes as $route => $routeClassName) {
 
-            if (! class_exists($routeClass)) {
+            if (! $this->isClassDefined($routeClassName)) {
                 throw new \Exception('Invalid route given');
             }
 
-            $routeClass = new $routeClass();
+            $routeClass = new $routeClassName();
 
             foreach ($routeClass->routes() as $route) {
                $this->registerRoute($route);
             }
         }
+    }
+
+    public function isClassDefined($routeClassName)
+    {
+        return class_exists($routeClassName);
+    }
+
+    public function isClassMethodDefined($route, $method)
+    {
+        return method_exists($route, $method);
     }
 }

@@ -17,7 +17,7 @@ class Centralino
     {
         switch ($type) {
             case 'slim':
-                return new Router\SlimRouter();
+                return new Router\SlimRouter(new \Slim\Slim());
             break;
         }
 
